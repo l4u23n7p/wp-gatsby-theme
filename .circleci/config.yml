@@ -1,0 +1,19 @@
+# portfolio-wp-theme CircleCI 2.0 configuration file
+
+version: 2
+jobs:
+  build:
+    docker:
+      - image: ubuntu:latest
+        user: root
+        environment:
+          THEME_NAME: wp-gatsby-theme
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "16:da:86:fe:b2:e3:73:84:3b:04:e1:f6:1e:e0:93:a4"
+      - run: apt update && apt install -y openssh-client
+      - run: ssh-keyscan -H $SFTP_HOSTNAME >> ~/.ssh/known_hosts
+      - run: scp -r -P $SFTP_PORT -oStrictHostKeyChecking=no ~/repo/* $SFTP_USER@$SFTP_HOSTNAME:$WP_THEMES_DIR/$THEME_NAME
