@@ -22,6 +22,7 @@ function custom_post_types()
             'labels' => array('name' => __('Projects'), 'singular_name' => __('Project')),
             'public' => true,
             'has_archive' => true,
+            'rest_base' => 'projects',
             'public' => true,
             'show_in_rest' => true,
             'supports' => array('title', 'editor', 'thumbnail', 'custom-fields'),
