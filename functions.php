@@ -38,6 +38,5 @@ function custom_post_types()
 add_action('publish_post', 'post_published_notification', 10, 2);
 function post_published_notification($ID, $post)
 {
-    //wp_remote_post('https://api.netlify.com/build_hooks/xxxxxxxxxxxxxxxxxxxx');
-    //will add later on prod
+    wp_remote_post('https: //api.netlify.com/build_hooks/5c3c61c7ccd232cd98299079');
 }
