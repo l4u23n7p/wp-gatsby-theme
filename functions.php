@@ -40,3 +40,22 @@ function post_published_notification($ID, $post)
 {
     wp_remote_post('https: //api.netlify.com/build_hooks/5c3c61c7ccd232cd98299079');
 }
+
+// Fonction pour modifier l'adresse email de l'expéditeur
+function wpm_email_from( $original_email_address ) {
+
+    $domain_name = substr(strrchr($original_email_address, "@"), 1);
+
+    return 'no-reply@' . $domain_name;
+
+}
+add_filter( 'wp_mail_from', 'wpm_email_from' );
+
+
+// Fonction pour changer le nom de l'expéditeur de l'email
+function wpm_expediteur( $original_email_from ) {
+
+    return 'System';
+
+}
+add_filter( 'wp_mail_from_name', 'wpm_expediteur' );
