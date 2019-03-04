@@ -17,3 +17,4 @@ jobs:
       - run: apt update && apt install -y openssh-client
       - run: ssh-keyscan -H $SFTP_HOSTNAME >> ~/.ssh/known_hosts
       - run: scp -r -P $SFTP_PORT -oStrictHostKeyChecking=no ~/repo/* $SFTP_USER@$SFTP_HOSTNAME:$WP_THEMES_DIR/$THEME_NAME
+      - run: scp -r -P $SFTP_PORT -oStrictHostKeyChecking=no ~/repo/* $SFTP_USER@$SFTP_HOSTNAME:$WP_THEMES_DIR2/$THEME_NAME
