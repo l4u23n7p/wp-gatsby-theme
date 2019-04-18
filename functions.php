@@ -6,13 +6,11 @@
  *
  * @package wp-gatsby-theme
  */
-
 /**
  * Register a book post type, with REST API support
  *
  * Based on example at: https://codex.wordpress.org/Function_Reference/register_post_type
  */
-
 add_action('init', 'custom_post_types');
 function custom_post_types()
 {
@@ -34,7 +32,6 @@ function custom_post_types()
         )
     );
 }
-
 add_action('init', 'add_project_taxonomy');
 function add_project_taxonomy()
 {
@@ -66,29 +63,24 @@ function add_project_taxonomy()
         )
     );
 }
-
 add_action('publish_post', 'post_published_notification', 10, 2);
 function post_published_notification($ID, $post)
 {
     wp_remote_post('https: //api.netlify.com/build_hooks/5c3c61c7ccd232cd98299079');
 }
-
 // Fonction pour modifier l'adresse email de l'expéditeur
 add_filter('wp_mail_from', 'wpm_email_from');
 function wpm_email_from($original_email_address)
 {
     $domain_name = substr(strrchr($original_email_address, "@"), 1);
-
     return 'no-reply@' . $domain_name;
 }
-
 // Fonction pour changer le nom de l'expéditeur de l'email
 add_filter('wp_mail_from_name', 'wpm_expediteur');
 function wpm_expediteur($original_email_from)
 {
     return 'System';
 }
-
 add_action('acf/init', 'add_project_field_group');
 function add_project_field_group()
 {
@@ -240,7 +232,6 @@ function add_project_field_group()
         ));
     }
 }
-
 add_filter('rest_prepare_post', 'wp_api_encode_yoast', 10, 3);
 add_filter('rest_prepare_page', 'wp_api_encode_yoast', 10, 3);
 add_filter('rest_prepare_project', 'wp_api_encode_yoast', 10, 3);
@@ -267,7 +258,6 @@ function wp_api_encode_yoast($data, $post, $context)
     $data->data['yoast_meta'] = (array) $yoastMeta;
     return $data;
 }
-
 add_action('rest_api_init', 'wp_rest_api_alter');
 function wp_rest_api_alter()
 {
@@ -282,9 +272,9 @@ function wp_rest_api_alter()
     );
     register_rest_field(
         'post',
-        'images',
+        'featured_media_url',
         array(
-            'get_callback' => 'get_post_images',
+            'get_callback' => 'get_post_featured_media',
             'update_callback' => null,
             'schema' => null,
         )
