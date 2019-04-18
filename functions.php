@@ -273,7 +273,7 @@ function wp_rest_api_alter()
 {
     register_rest_field(
         'post',
-        'categories_name',
+        'post_categories',
         array(
             'get_callback' => 'get_post_categories',
             'update_callback' => null,
