@@ -39,7 +39,7 @@ function add_project_taxonomy()
 {
     register_taxonomy(
         'type',
-        'projet',
+        'project',
         array(
           'label' => 'Types',
           'labels' => array(
