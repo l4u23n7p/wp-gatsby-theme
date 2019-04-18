@@ -35,6 +35,7 @@ function custom_post_types()
     );
 }
 
+add_action('init', 'add_project_taxonomy');
 function add_project_taxonomy()
 {
     register_taxonomy(
@@ -65,7 +66,6 @@ function add_project_taxonomy()
         )
     );
 }
-add_action('init', 'add_project_taxonomy');
 
 add_action('publish_post', 'post_published_notification', 10, 2);
 function post_published_notification($ID, $post)
@@ -74,21 +74,22 @@ function post_published_notification($ID, $post)
 }
 
 // Fonction pour modifier l'adresse email de l'expéditeur
+add_filter('wp_mail_from', 'wpm_email_from');
 function wpm_email_from($original_email_address)
 {
     $domain_name = substr(strrchr($original_email_address, "@"), 1);
 
     return 'no-reply@' . $domain_name;
 }
-add_filter('wp_mail_from', 'wpm_email_from');
 
 // Fonction pour changer le nom de l'expéditeur de l'email
+add_filter('wp_mail_from_name', 'wpm_expediteur');
 function wpm_expediteur($original_email_from)
 {
     return 'System';
 }
-add_filter('wp_mail_from_name', 'wpm_expediteur');
 
+add_action('acf/init', 'add_project_field_group');
 function add_project_field_group()
 {
     if (function_exists('acf_add_local_field_group')) {
@@ -239,8 +240,10 @@ function add_project_field_group()
         ));
     }
 }
-add_action('acf/init', 'add_project_field_group');
 
+add_filter('rest_prepare_post', 'wp_api_encode_yoast', 10, 3);
+add_filter('rest_prepare_page', 'wp_api_encode_yoast', 10, 3);
+add_filter('rest_prepare_project', 'wp_api_encode_yoast', 10, 3);
 function wp_api_encode_yoast($data, $post, $context)
 {
     $yoastMeta = array(
@@ -265,6 +268,25 @@ function wp_api_encode_yoast($data, $post, $context)
     return $data;
 }
 
-add_filter('rest_prepare_post', 'wp_api_encode_yoast', 10, 3);
-add_filter('rest_prepare_page', 'wp_api_encode_yoast', 10, 3);
-add_filter('rest_prepare_project', 'wp_api_encode_yoast', 10, 3);
+add_action('rest_api_init', 'wp_rest_api_alter');
+function wp_rest_api_alter()
+{
+    register_rest_field(
+        'post',
+        'categories',
+        array(
+            'get_callback' => 'get_post_categories',
+            'update_callback' => null,
+            'schema' => null,
+        )
+    );
+}
+function get_post_categories($data, $field, $request)
+{
+    $formatted_categories = array();
+    $categories = get_the_category($data['id']);
+    foreach ($categories as $category) {
+        $formatted_categories[] = $category->name;
+    }
+    return $formatted_categories;
+}
