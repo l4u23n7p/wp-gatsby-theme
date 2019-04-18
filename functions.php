@@ -35,6 +35,38 @@ function custom_post_types()
     );
 }
 
+function add_project_taxonomy()
+{
+    register_taxonomy(
+        'type',
+        'projet',
+        array(
+          'label' => 'Types',
+          'labels' => array(
+            'name' => 'Types',
+            'singular_name' => 'Type',
+            'all_items' => 'Tous les types',
+            'edit_item' => 'Éditer le type',
+            'view_item' => 'Voir le type',
+            'update_item' => 'Mettre à jour le type',
+            'add_new_item' => 'Ajouter un type',
+            'new_item_name' => 'Nouveau type',
+            'search_items' => 'Rechercher parmi les types',
+            'popular_items' => 'Types les plus utilisés'
+            ),
+            'hierarchical' => true,
+            'rest_base' => 'types',
+            'public' => true,
+            'show_in_rest' => true,
+            'show_ui' => true,
+            'show_in_menu' => true,
+            'show_admin_column' => true,
+            'show_in_nav_menus' => true,
+        )
+    );
+}
+add_action('init', 'add_project_taxonomy');
+
 add_action('publish_post', 'post_published_notification', 10, 2);
 function post_published_notification($ID, $post)
 {
