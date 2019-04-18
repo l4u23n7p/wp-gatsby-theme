@@ -280,6 +280,15 @@ function wp_rest_api_alter()
             'schema' => null,
         )
     );
+    register_rest_field(
+        'post',
+        'images',
+        array(
+            'get_callback' => 'get_post_images',
+            'update_callback' => null,
+            'schema' => null,
+        )
+    );
 }
 function get_post_categories($data, $field, $request)
 {
@@ -289,4 +298,17 @@ function get_post_categories($data, $field, $request)
         $formatted_categories[] = $category->name;
     }
     return $formatted_categories;
+}
+function get_post_images($data, $field, $request)
+{
+    $medium = wp_get_attachment_image_src(get_post_thumbnail_id($data->id), 'medium');
+    $medium_url = $medium['0'];
+
+    $large = wp_get_attachment_image_src(get_post_thumbnail_id($data->id), 'large');
+    $large_url = $large['0'];
+
+    return array(
+        'medium' => $medium_url,
+        'large' => $large_url,
+    );
 }
