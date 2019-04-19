@@ -36,6 +36,6 @@ function wpm_expediteur($original_email_from)
     return 'API Portfolio';
 }
 
-include './custom/types.php';
-include './custom/fields.php';
-include './custom/api.php';
+require get_template_directory() . '/custom/types.php';
+require get_template_directory() . '/custom/fields.php';
+require get_template_directory() . '/custom/api.php';
