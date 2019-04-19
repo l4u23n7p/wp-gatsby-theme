@@ -295,13 +295,19 @@ function get_post_categories($data, $field, $request)
 {
     $formatted_categories = array();
     $categories = get_the_category($data['id']);
-    foreach ($categories as $category) {
-        $formatted_categories[] = $category->name;
+    if ($categories) {
+        foreach ($categories as $category) {
+            $formatted_categories[] = $category->name;
+        }
+        return $formatted_categories;
     }
-    return $formatted_categories;
+    return [];
 }
 function get_post_featured_media($data, $field, $request)
 {
-    $featured_media_url = wp_get_attachment_image_src(get_post_thumbnail_id($data->id))['0'];
-    return $featured_media_url;
+    $featured_media_url = wp_get_attachment_image_src(get_post_thumbnail_id($data->id), 'full')['0'];
+    if ($featured_media_url) {
+        return $featured_media_url;
+    }
+    return "";
 }
