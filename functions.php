@@ -303,6 +303,7 @@ function get_post_categories($data, $field, $request)
     if ($categories) {
         foreach ($categories as $category) {
             array_push($formatted_categories, (object) [
+                'text_color' => get_field('text_color', $category),
                 'color' => get_field('color', $category),
                 'title' => $category->name,
             ]);
