@@ -318,6 +318,16 @@ function get_post_featured_media($data, $field, $request)
 }
 function get_author_meta($data, $field, $request)
 {
+    $author_meta = array();
     $user_data = get_userdata($data['author']);
-    return $user_data;
+    $avatar_url = get_avatar_url($user_data['data']['ID']);
+    $twitter_url = get_the_author_meta('twitter', $user_data['data']['ID']);
+    $linkedin_url = get_the_author_meta('linkedin', $user_data['data']['ID']);
+
+    $author_meta['display_name'] = $user_data['data']['display_name'];
+    $author_meta['avatar_url'] = $avatar_url;
+    $author_meta['twitter_url'] = $twitter_url;
+    $author_meta['linkedin_url'] = $linkedin_url;
+
+    return $author_meta;
 }
