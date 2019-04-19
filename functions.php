@@ -6,11 +6,22 @@
  *
  * @package wp-gatsby-theme
  */
+
 /**
  * Register a book post type, with REST API support
  *
  * Based on example at: https://codex.wordpress.org/Function_Reference/register_post_type
  */
+add_theme_support('title-tag');
+add_theme_support('post-thumbnails');
+add_theme_support('html5', array(
+    'search-form',
+    'comment-form',
+    'comment-list',
+    'gallery',
+    'caption',
+));
+
 add_action('init', 'custom_post_types');
 function custom_post_types()
 {
@@ -270,15 +281,15 @@ function wp_rest_api_alter()
             'schema' => null,
         )
     );
-    // register_rest_field(
-    //     'post',
-    //     'featured_media_url',
-    //     array(
-    //         'get_callback' => 'get_post_featured_media',
-    //         'update_callback' => null,
-    //         'schema' => null,
-    //     )
-    // );
+    register_rest_field(
+        'post',
+        'featured_media_url',
+        array(
+            'get_callback' => 'get_post_featured_media',
+            'update_callback' => null,
+            'schema' => null,
+        )
+    );
 }
 function get_post_categories($data, $field, $request)
 {
@@ -289,8 +300,8 @@ function get_post_categories($data, $field, $request)
     }
     return $formatted_categories;
 }
-// function get_post_featured_media($data, $field, $request)
-// {
-//     $featured_media_url = wp_get_attachment_image_src(get_post_thumbnail_id($data->id))['0'];
-//     return $featured_media_url;
-// }
+function get_post_featured_media($data, $field, $request)
+{
+    $featured_media_url = wp_get_attachment_image_src(get_post_thumbnail_id($data->id))['0'];
+    return $featured_media_url;
+}
