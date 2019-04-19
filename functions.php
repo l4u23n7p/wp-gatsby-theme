@@ -77,7 +77,7 @@ function add_project_taxonomy()
 add_action('publish_post', 'post_published_notification', 10, 2);
 function post_published_notification($ID, $post)
 {
-    wp_remote_post('https: //api.netlify.com/build_hooks/5c3c61c7ccd232cd98299079');
+    wp_remote_post('https://api.netlify.com/build_hooks/5c3c61c7ccd232cd98299079');
 }
 // Fonction pour modifier l'adresse email de l'expéditeur
 add_filter('wp_mail_from', 'wpm_email_from');
@@ -290,6 +290,11 @@ function wp_rest_api_alter()
             'schema' => null,
         )
     );
+    register_rest_field('post', 'author_meta', array(
+        'get_callback' => 'get_author_meta',
+        'update_callback' => null,
+        'schema' => null,
+    ));
 }
 function get_post_categories($data, $field, $request)
 {
@@ -310,4 +315,9 @@ function get_post_featured_media($data, $field, $request)
         return $featured_media_url;
     }
     return "";
+}
+function get_author_meta($data, $field, $request)
+{
+    $user_data = get_userdata($data['author']);
+    return $user_data;
 }
