@@ -453,7 +453,7 @@ function add_color_fields()
                     array(
                         'param' => 'taxonomy',
                         'operator' => '==',
-                        'value' => 'type',
+                        'value' => 'filter',
                     ),
                 ),
             ),
