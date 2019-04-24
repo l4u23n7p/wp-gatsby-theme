@@ -3,6 +3,10 @@
 version: 2
 jobs:
   build:
+    branches:
+      only:
+        - master
+        - develop
     docker:
       - image: ubuntu:latest
         user: root
