@@ -253,7 +253,7 @@ function add_project_field_group()
                                         'id' => '',
                                     ),
                                     'return_format' => 'array',
-                                    'preview_size' => 'full',
+                                    'preview_size' => 'medium',
                                     'library' => 'all',
                                     'min_width' => '',
                                     'min_height' => '',
@@ -323,13 +323,13 @@ function add_project_field_group()
                     'layouts' => array(
                         'layout_5cba2d02396af' => array(
                             'key' => 'layout_5cba2d02396af',
-                            'name' => 'url',
-                            'label' => 'URL',
+                            'name' => 'github',
+                            'label' => 'Github',
                             'display' => 'block',
                             'sub_fields' => array(
                                 array(
                                     'key' => 'field_5cba2d11396b0',
-                                    'label' => 'URL',
+                                    'label' => 'Url',
                                     'name' => 'url',
                                     'type' => 'url',
                                     'instructions' => '',
@@ -376,10 +376,36 @@ function add_project_field_group()
                             'min' => '',
                             'max' => '',
                         ),
+                        'layout_5cc1ee4fc674c' => array(
+                            'key' => 'layout_5cc1ee4fc674c',
+                            'name' => 'demo',
+                            'label' => 'Demo',
+                            'display' => 'block',
+                            'sub_fields' => array(
+                                array(
+                                    'key' => 'field_5cc1ee56c674d',
+                                    'label' => 'Url',
+                                    'name' => 'url',
+                                    'type' => 'url',
+                                    'instructions' => '',
+                                    'required' => 0,
+                                    'conditional_logic' => 0,
+                                    'wrapper' => array(
+                                        'width' => '',
+                                        'class' => '',
+                                        'id' => '',
+                                    ),
+                                    'default_value' => '',
+                                    'placeholder' => '',
+                                ),
+                            ),
+                            'min' => '',
+                            'max' => '',
+                        ),
                     ),
                     'button_label' => 'Ajouter un élément',
                     'min' => 1,
-                    'max' => 1,
+                    'max' => 2,
                 ),
             ),
             'location' => array(
