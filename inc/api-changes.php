@@ -119,9 +119,12 @@ function get_project_types($data, $field, $request)
 
 function get_post_featured_media($data, $field, $request)
 {
-    $featured_media_url = wp_get_attachment_image_src(get_post_thumbnail_id($data->id), 'full')['0'];
-    if ($featured_media_url) {
-        return $featured_media_url;
+    $media_id = get_post_thumbnail_id($data['id']);
+    if ( $media_id != "" ) {
+        $featured_media = wp_get_attachment_image_src($media_id, 'full');
+        if ($featured_media) {
+            return $featured_media['0'];
+        }
     }
     return "";
 }
