@@ -3,10 +3,6 @@
  * Rest API modifications
  */
 
-add_action('rest_api_init', 'wp_rest_api_alter');
-add_filter('rest_prepare_post', 'wp_api_encode_yoast', 10, 3);
-add_filter('rest_prepare_page', 'wp_api_encode_yoast', 10, 3);
-add_filter('rest_prepare_project', 'wp_api_encode_yoast', 10, 3);
 
 function wp_api_encode_yoast($data, $post, $context)
 {
@@ -31,6 +27,9 @@ function wp_api_encode_yoast($data, $post, $context)
     $data->data['yoast_meta'] = (array) $yoastMeta;
     return $data;
 }
+add_filter('rest_prepare_post', 'wp_api_encode_yoast', 10, 3);
+add_filter('rest_prepare_page', 'wp_api_encode_yoast', 10, 3);
+add_filter('rest_prepare_project', 'wp_api_encode_yoast', 10, 3);
 
 function wp_rest_api_alter()
 {
@@ -61,18 +60,27 @@ function wp_rest_api_alter()
             'schema' => null,
         )
     );
-    register_rest_field('post', 'author_meta', array(
-        'get_callback' => 'get_author_meta',
-        'update_callback' => null,
-        'schema' => null,
-    ));
-    register_rest_field('project', 'project_meta', array(
-        'get_callback' => 'get_project_meta',
-        'update_callback' => null,
-        'schema' => null,
-    ));
+    register_rest_field(
+        'post',
+        'author_meta',
+        array(
+            'get_callback' => 'get_author_meta',
+            'update_callback' => null,
+            'schema' => null,
+        )
+    );
+    register_rest_field(
+        'project',
+        'project_meta',
+        array(
+            'get_callback' => 'get_project_meta',
+            'update_callback' => null,
+            'schema' => null,
+        )
+    );
 }
-
+add_action('rest_api_init', 'wp_rest_api_alter');
+            
 function get_post_categories($data, $field, $request)
 {
     $formatted_categories = array();
@@ -126,18 +134,18 @@ function get_author_meta($data, $field, $request)
     $avatar_url = get_avatar_url($user_data->data->ID);
     $twitter_url = get_the_author_meta('twitter', $user_data->data->ID);
     $linkedin_url = get_the_author_meta('linkedin', $user_data->data->ID);
-
+    
     $author_meta['display_name'] = $display_name;
     $author_meta['avatar_url'] = $avatar_url;
     $author_meta['twitter_url'] = $twitter_url;
     $author_meta['linkedin_url'] = $linkedin_url;
-
+    
     return $author_meta;
 }
 
 function get_project_meta($data, $field, $request)
 {
     $fields = get_fields($data['id']);
-   
+    
     return $fields;
 }

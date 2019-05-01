@@ -37,6 +37,15 @@ function wpm_expediteur($original_email_from)
     return 'API Portfolio';
 }
 
-require get_template_directory() . '/custom/types.php';
-require get_template_directory() . '/custom/fields.php';
-require get_template_directory() . '/custom/api.php';
+// Load custom post types
+require get_template_directory() . '/post-types/project.php';
+
+// Load custom taxonomies
+require get_template_directory() . '/taxonomies/filter.php';
+
+// Load custom fields
+require get_template_directory() . '/custom-fields/project.php';
+require get_template_directory() . '/custom-fields/taxonomies.php';
+
+// Load Rest API changes
+require get_template_directory() . '/inc/api-changes.php';
