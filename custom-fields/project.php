@@ -1,11 +1,7 @@
 <?php
 /**
- * ACF fields
+ * Custom fields for project post type
  */
-
-add_action('acf/init', 'add_project_field_group');
-add_action('acf/init', 'add_color_fields');
-
 function add_project_field_group()
 {
     if( function_exists('acf_add_local_field_group') ) {
@@ -428,69 +424,4 @@ function add_project_field_group()
         ));
     }
 }
-
-function add_color_fields()
-{
-    if (function_exists('acf_add_local_field_group')) {
-        acf_add_local_field_group(array(
-            'key' => 'group_5cb98c42871bc',
-            'title' => 'Category',
-            'fields' => array(
-                array(
-                    'key' => 'field_5cb98c4a2000c',
-                    'label' => 'Color',
-                    'name' => 'color',
-                    'type' => 'color_picker',
-                    'instructions' => '',
-                    'required' => 1,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'default_value' => '',
-                ),
-                array(
-                    'key' => 'field_5cb9b78d6487e',
-                    'label' => 'Text Color',
-                    'name' => 'text_color',
-                    'type' => 'color_picker',
-                    'instructions' => '',
-                    'required' => 1,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'default_value' => '',
-                ),
-            ),
-            'location' => array(
-                array(
-                    array(
-                        'param' => 'taxonomy',
-                        'operator' => '==',
-                        'value' => 'category',
-                    ),
-                ),
-                array(
-                    array(
-                        'param' => 'taxonomy',
-                        'operator' => '==',
-                        'value' => 'filter',
-                    ),
-                ),
-            ),
-            'menu_order' => 0,
-            'position' => 'normal',
-            'style' => 'default',
-            'label_placement' => 'top',
-            'instruction_placement' => 'label',
-            'hide_on_screen' => '',
-            'active' => true,
-            'description' => '',
-        ));
-    }
-}
+add_action('acf/init', 'add_project_field_group');
