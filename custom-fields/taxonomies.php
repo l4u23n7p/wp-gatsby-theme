@@ -122,16 +122,16 @@ function colors_columns_content( $taxonomy, $content, $column_name, $term_id )
 }
 
 function category_columns_content( $content, $column_name, $term_id) {
-    return taxonomy_columns_content( 'category', $content, $column_name, $term_id );
+    return colors_columns_content( 'category', $content, $column_name, $term_id );
 }
 add_filter( 'manage_category_custom_column', 'category_columns_content', 10, 3 );
 
 function filter_columns_content( $content, $column_name, $term_id) {
-    return taxonomy_columns_content( 'filter', $content, $column_name, $term_id );
+    return colors_columns_content( 'filter', $content, $column_name, $term_id );
 }
 add_filter( 'manage_filter_custom_column', 'filter_columns_content', 10, 3 );
 
 function post_tag_columns_content( $content, $column_name, $term_id) {
-    return taxonomy_columns_content( 'post_tag', $content, $column_name, $term_id );
+    return colors_columns_content( 'post_tag', $content, $column_name, $term_id );
 }
 add_filter( 'manage_post_tag_custom_column', 'post_tag_columns_content', 10, 3 );
