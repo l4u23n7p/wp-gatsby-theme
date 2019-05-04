@@ -91,7 +91,7 @@ function get_post_categories($data, $field, $request)
                 'text_color' => get_field('text_color', $category),
                 'color' => get_field('color', $category),
                 'title' => $category->name,
-                'slug' => $type->slug,
+                'slug' => $category->slug,
             ]);
         }
         return $formatted_categories;
