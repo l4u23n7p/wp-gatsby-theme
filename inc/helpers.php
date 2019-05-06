@@ -1,6 +1,6 @@
 <?php
 
-function wp_gatsby_theme_add_notices($new) {
+function wp_gatsby_theme_add_notices( $new ) {
     $notices = get_option( 'wp_gatsby_theme_notices' );
     $notices[] = $new;
     update_option( 'wp_gatsby_theme_notices', $notices );
@@ -173,8 +173,8 @@ function wp_gatsby_theme_update_config( $rules = array() ) {
 /**
  * Settings Helpers
  */
-function option_input_help($type, $args) {
-    switch ($type) {
+function option_input_help( $type, $args ) {
+    switch ( $type ) {
         case 'text':
             echo "<p>$args</p>";
             break;
@@ -183,7 +183,7 @@ function option_input_help($type, $args) {
             echo "<style> .input-help td { padding: 5px;}</style>";
             echo "<h4>{$args['title']}</h4>";
             echo "<table class='input-help'>";
-            foreach ($args['value'] as $key => $value) {
+            foreach ( $args['value'] as $key => $value ) {
                 echo "<tr><td><code>$key</code></td><td>=></td><td>$value</td></tr>";
             }
             echo "</table>";
@@ -195,18 +195,18 @@ function option_input_help($type, $args) {
     }
 }
 
-function option_input_string($setting, $name, $default = null, $desc = "", $size = 40) {
+function option_input_string( $setting, $name, $default = null, $desc = "", $size = 40 ) {
     $options = get_option( $setting );
-    $value = isset($options[$name]) ? $options[$name] : $default;
+    $value = isset( $options[$name] ) ? $options[$name] : $default;
     echo "<input id='{$setting}_{$name}' name='{$setting}[{$name}]' type='text' value='" . $value . "' size=$size /> $desc";
 }
 
-function option_input_button($setting, $name, $action, $label, $desc = "") {
+function option_input_button( $setting, $name, $action, $label, $desc = "" ) {
     echo "<input id='{$setting}_{$name}' name='{$setting}[{$name}]' type='button' onclick='$action()' value='$label' /> $desc";
 }
 
-function option_input_checkbox($setting, $name, $default = 0, $desc = "") {
+function option_input_checkbox( $setting, $name, $default = 0, $desc = "" ) {
     $options = get_option( $setting );
-    $value = isset($options[$name]) ? $options[$name] : $default;
+    $value = isset( $options[$name] ) ? $options[$name] : $default;
     echo "<input id='{$setting}_{$name}' name='{$setting}[{$name}]' type='checkbox' class='code' value='1' " . checked( 1, $value, false ) . " /> $desc";
 }

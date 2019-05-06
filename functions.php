@@ -72,7 +72,7 @@ function activate_jwt_auth() {
         '</IfModule>'
     );
 
-    $htaccess_status = wp_gatsby_theme_update_htaccess($htaccess);
+    $htaccess_status = wp_gatsby_theme_update_htaccess( $htaccess );
 
     $secret_key = bin2hex( random_bytes( 32 ) );
     $wp_config = array(
@@ -81,9 +81,9 @@ function activate_jwt_auth() {
         "define( 'JWT_AUTH_CORS_ENABLE', false );"
     );
 
-    $wp_config_status = wp_gatsby_theme_update_config($wp_config);
+    $wp_config_status = wp_gatsby_theme_update_config( $wp_config );
     
-    if( is_wp_error( $wp_config_status )) {
+    if( is_wp_error( $wp_config_status ) ) {
         $wp_config_type = 'error';
     } else {
         $wp_config_type = 'success';
@@ -96,7 +96,7 @@ function activate_jwt_auth() {
         ) 
     );
     
-    if( is_wp_error( $htaccess_status )) {
+    if( is_wp_error( $htaccess_status ) ) {
         $htaccess_type = 'error';
     } else {
         $htaccess_type = 'success';
@@ -128,7 +128,7 @@ function deactivate_jwt_auth() {
         ) 
     );
     
-    if( is_wp_error( $htaccess_status )) {
+    if( is_wp_error( $htaccess_status ) ) {
         $htaccess_type = 'error';
     } else {
         $htaccess_type = 'success';

@@ -12,8 +12,8 @@ if ( isset( $_GET['settings-updated'] ) ) {
     <?php settings_errors( 'wp_gatsby_theme_messages' ); ?>
     <form action="options.php" method="post">
         <?php 
-        settings_fields('theme-settings');
-        do_settings_sections('theme-settings');
+        settings_fields( 'theme-settings' );
+        do_settings_sections( 'theme-settings' );
         submit_button(); 
         ?>
     </form>
@@ -29,7 +29,7 @@ if ( isset( $_GET['settings-updated'] ) ) {
         jQuery.post(ajaxurl, data, function(response) {
             console.log(response);
             <?php
-            if(!WP_DEBUG) {
+            if( ! WP_DEBUG ) {
                 echo "location.reload();";
             } 
             ?>

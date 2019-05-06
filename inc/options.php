@@ -33,8 +33,6 @@ function plugin_admin_init(){
     add_settings_section('wp_gatsby_theme_jwt_settings_section', 'JWT Auth Settings', 'jwt_settings_text', 'theme-settings');
 
     add_settings_field('wp_gatsby_theme_jwt_expire', 'Token Expire Time', 'wp_gatsby_theme_jwt_expire_callback', 'theme-settings', 'wp_gatsby_theme_jwt_settings_section');
-
-
 }
 add_action('admin_init', 'plugin_admin_init');
 
@@ -111,15 +109,14 @@ function deploy_options_validate($options) {
  * Settings Hook
  */
 
-add_action( 'wp_ajax_deploy-theme', 'run_deploy_theme' );
 function run_deploy_theme() {
     check_ajax_referer( 'manual-deploy', '_nonce' );
-
+    
     $option = get_option( 'wp_gatsby_theme_deploy_settings' );
-
+    
     if ( $option && isset($option['hook']) && $option['hook'] != null ) {
         $res = wp_remote_post($option['hook']);
-
+        
         if ( is_wp_error( $res ) ) {
             echo $res->get_error_message();
             $notice = array(
@@ -140,3 +137,4 @@ function run_deploy_theme() {
     }
     wp_die();
 }
+add_action( 'wp_ajax_deploy-theme', 'run_deploy_theme' );
