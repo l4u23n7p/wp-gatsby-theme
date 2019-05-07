@@ -27,19 +27,21 @@ function wp_gatsby_theme_status_toolbar() {
 	
 	$status_img = get_option( 'wp_gatsby_theme_deploy_settings' )['status_image'];
     $status_link = get_option( 'wp_gatsby_theme_deploy_settings' )['status_link'];
-	
-	$wp_admin_bar->add_node(
-        array(
-            'id'    => 'site-status',
-            'title' => '<img src="' . $status_img . '" />',
-            'href'  => $status_link,
-            'meta'	=> array(
-                'class' => 'site-status-toolbar',
-                'rel' => 'noopener noreferrer',
-                'target' => '_blank'
+    
+    if( isset( $status_img ) ) {
+        $wp_admin_bar->add_node(
+            array(
+                'id'    => 'site-status',
+                'title' => '<img src="' . $status_img . '" />',
+                'href'  => $status_link,
+                'meta'	=> array(
+                    'class' => 'site-status-toolbar',
+                    'rel' => 'noopener noreferrer',
+                    'target' => '_blank'
+                )
             )
-        )
-    );
+        );
+    }
 }
 add_action( 'wp_before_admin_bar_render', 'wp_gatsby_theme_status_toolbar' ); 
 
