@@ -1,5 +1,5 @@
 <?php
-if ( ! current_user_can( 'manage_options' ) ) {
+if ( ! current_user_can('manage_options') ) {
     return;
 }
 
@@ -9,17 +9,35 @@ if ( isset( $_GET['settings-updated'] ) ) {
 ?>
 <div>
     <h2>WP Gatsby Theme - Settings</h2>
-    <?php settings_errors( 'wp_gatsby_theme_messages' ); ?>
+    <?php
+    settings_errors( 'wp_gatsby_theme_messages' );
+    
+    $status_img = get_option( 'wp_gatsby_theme_deploy_settings' )['status_image'];
+    $status_link = get_option( 'wp_gatsby_theme_deploy_settings' )['status_link'];
+    ?>
+    <?php if ( isset( $status_img ) ): ?>
+        <div>
+            <h3>Site Status</h3>
+            <?php if ( isset( $status_link ) ): ?>
+                <a href="<?php echo $status_link; ?>"
+                    target="_blank" rel="noopener noreferrer">
+                    <img src="<?php echo $status_img; ?>" />
+                </a>
+            <?php else: ?>
+                    <img src="<?php echo $status_img; ?>" />
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
     <form action="options.php" method="post">
-        <?php 
+        <?php
         settings_fields( 'theme-settings' );
         do_settings_sections( 'theme-settings' );
-        submit_button(); 
+        submit_button();
         ?>
     </form>
 </div>
 
-<script type="text/javascript" >
+<script type="text/javascript">
     function run_manual_deploy() {
         var data = {
             action: 'deploy-theme',
@@ -29,9 +47,9 @@ if ( isset( $_GET['settings-updated'] ) ) {
         jQuery.post(ajaxurl, data, function(response) {
             console.log(response);
             <?php
-            if( ! WP_DEBUG ) {
+            if ( ! WP_DEBUG ) {
                 echo "location.reload();";
-            } 
+            }
             ?>
         });
     }

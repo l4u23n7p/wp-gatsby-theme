@@ -23,7 +23,11 @@ function plugin_admin_init(){
     
     add_settings_section( 'wp_gatsby_theme_deploy_settings_section', 'Deploy Settings', 'deploy_settings_text', 'theme-settings' );
 
-    add_settings_field('wp_gatsby_theme_deploy_hook', 'Deploy Hook', 'wp_gatsby_theme_deploy_hook_callback', 'theme-settings', 'wp_gatsby_theme_deploy_settings_section');
+    add_settings_field( 'wp_gatsby_theme_deploy_hook', 'Site Deploy Hook', 'wp_gatsby_theme_deploy_hook_callback', 'theme-settings', 'wp_gatsby_theme_deploy_settings_section' );
+    
+    add_settings_field( 'wp_gatsby_theme_deploy_status_image', 'Site Status Image', 'wp_gatsby_theme_deploy_status_image_callback', 'theme-settings', 'wp_gatsby_theme_deploy_settings_section' );
+    
+    add_settings_field( 'wp_gatsby_theme_deploy_status_link', 'Site Status Link', 'wp_gatsby_theme_deploy_status_link_callback', 'theme-settings', 'wp_gatsby_theme_deploy_settings_section' );
 
     add_settings_field( 'wp_gatsby_theme_deploy_auto', 'Auto Deploy', 'wp_gatsby_theme_deploy_auto_callback', 'theme-settings', 'wp_gatsby_theme_deploy_settings_section' );
     
@@ -68,7 +72,15 @@ function wp_gatsby_theme_deploy_auto_callback() {
 }
 
 function wp_gatsby_theme_deploy_hook_callback() {
-    option_input_string('wp_gatsby_theme_deploy_settings', 'hook', null, '', 80);
+    option_input_string( 'wp_gatsby_theme_deploy_settings', 'hook', null, '', 80 );
+}
+
+function wp_gatsby_theme_deploy_status_image_callback() {
+    option_input_string( 'wp_gatsby_theme_deploy_settings', 'status_image', null, '', 80 );
+}
+
+function wp_gatsby_theme_deploy_status_link_callback() {
+    option_input_string( 'wp_gatsby_theme_deploy_settings', 'status_link', null, '', 80 );
 }
 
 function wp_gatsby_theme_jwt_expire_callback() {
@@ -106,14 +118,27 @@ function jwt_options_validate( $options ) {
 function deploy_options_validate( $options ) {
     $options['auto'] = intval( $options['auto'] );
 
-    $options['hook'] = trim($options['hook']);
-
-    if( !filter_var($options['hook'], FILTER_VALIDATE_URL) ) {
-        add_settings_error( 'wp_gatsby_theme_messages', 'wp_gatsby_theme_settings_error_deplopy_hook', __( 'Deploy Hook value is invalid', 'wp-gatsby-theme' ), 'error' );
-        $options['hook'] = null;
-    }
+    $options['hook'] = validate_url( trim( $options['hook'] ), 'Deploy Hook value is invalid');
+    $options['status_image'] = validate_url( trim( $options['status_image'] ), 'Status Image value is invalid', null, true);
+    $options['status_link'] = validate_url( trim( $options['status_link'] ), 'Status Link value is invalid', null, true);
 
     return $options;
+}
+
+function validate_url($value, $error, $default = null, $nullable = false) {
+
+    if( $nullable ) {
+        if( $value == '' ) {
+            return $default;
+        }
+    }
+
+    if( !filter_var( $value, FILTER_VALIDATE_URL ) ) {
+        add_settings_error( 'wp_gatsby_theme_messages', 'wp_gatsby_theme_settings_error', __( $error, 'wp-gatsby-theme' ), 'error' );
+        $value = $default;
+    }
+
+    return $value;
 }
 
 /**
