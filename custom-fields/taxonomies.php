@@ -113,11 +113,11 @@ function colors_columns_content( $taxonomy, $content, $column_name, $term_id )
 
     if ('color' == $column_name) {
         $color = get_field( 'color', $term );
-        $content = '<div style="background-color: ' . $color . ';height: 25px;box-shadow: 1px 1px 4px black;">';
+        $content = '<div id="background-colorbox" class="background-colorbox" style="background-color: ' . $color . ';">';
     }
     if ( 'text_color' == $column_name ) {
         $text_color = get_field( 'text_color', $term );
-        $content = '<div style="background-color: ' . $text_color . ';height: 25px;box-shadow: 1px 1px 4px black;">';
+        $content = '<div id="text-colorbox" class="text-colorbox" style="background-color: ' . $text_color . ';">';
 		
     }
 	return $content;

@@ -19,6 +19,13 @@ add_theme_support( 'html5' ,
     )
 );
 
+function load_custom_wp_admin_style()
+{
+    wp_register_style('custom_wp_admin_css', get_template_directory_uri() . '/css/custom-admin-style.css', false, '1.0.0');
+    wp_enqueue_style('custom_wp_admin_css');
+}
+add_action('admin_enqueue_scripts', 'load_custom_wp_admin_style');
+
 function wp_gatsby_theme_status_toolbar() {
 	global $wp_admin_bar;
 
