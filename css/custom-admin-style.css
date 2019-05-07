@@ -1,7 +1,8 @@
-.site-status-toolbar > div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.site-status-toolbar > div,
+.site-status-toolbar > a {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 #wp_gatsby_theme_deploy_settings_manual {
