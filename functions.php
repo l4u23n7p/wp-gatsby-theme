@@ -19,15 +19,16 @@ add_theme_support( 'html5' ,
     )
 );
 
-function post_published_notification( $ID, $post ) {
+function wp_gatsby_theme_auto_deploy( $new_status, $old_status, $post ) {
     $option = get_option( 'wp_gatsby_theme_deploy_settings' );
     
     if ( $option && isset( $option['hook'] ) && $option['hook'] != null && isset( $option['auto'] ) && $option['auto'] == 1 ) {
-        wp_remote_post( $option['hook'] );
+        if( $new_status == 'publish' ) {
+            wp_remote_post( $option['hook'] );
+        }
     }
 }
-add_action( 'publish_post', 'post_published_notification', 10, 2 );
-add_action( 'publish_project', 'post_published_notification', 10, 2 );
+add_action( 'transition_post_status', 'wp_gatsby_theme_auto_deploy', 10, 3 );
 
 // Fonction pour modifier l'adresse email de l'expéditeur
 function wpm_email_from( $original_email_address ) {
