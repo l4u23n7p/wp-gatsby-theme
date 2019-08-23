@@ -1,18 +1,28 @@
 ---
 - name: "Deploy wordpress theme"
-  any_errors_fatal: true
   hosts: all
   tasks:
+    - name: Ensure theme dir
+      file:
+        path: "{{ theme_dir }}"
+        state: directory
+        mode: 0775
+      become: yes
     - name: Update theme
       synchronize:
-        src: .
+        src: "{{ workspace }}"
         dest: "{{ theme_dir }}"
         delete: yes
         rsync_opts:
-          - "--exclude={ansible,.circleci}"
-    - name: Set owner
+          - "--exclude-from={{ excludes_file }}"
+          - "--delete-excluded"
+      become: yes
+    - name: Set ownership
       file:
         path: "{{ theme_dir }}"
+        state: directory
         recurse: yes
         owner: www-data
         group: webusr
+        mode: g+w
+      become: yes

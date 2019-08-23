@@ -6,7 +6,6 @@ executors:
   deploy:
     docker:
       - image: circleci/python:3.7
-  
 
 job-references:
   mysql_image: &mysql_image circleci/mysql:8.0.0
@@ -39,7 +38,7 @@ job-references:
             composer global require "phpunit/phpunit=5.7.*"
             # composer global require wp-coding-standards/wpcs
             rm -rf $WP_TESTS_DIR $WP_CORE_DIR
-            bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 latest
+            bash scripts/install-wp-tests.sh wordpress_test root '' 127.0.0.1 latest
       - run:
           name: "Run Tests"
           command: |
@@ -51,10 +50,6 @@ job-references:
           path: test-results
 
   deploy_job: &deploy_job
-    environment:
-      - ANSIBLE_HOST_KEY_CHECKING: False
-      - ANSIBLE_LOCAL_TEMP: /home/circleci/.ansible/tmp
-      - ANSIBLE_REMOTE_TEMP: /home/circleci/.ansible/tmp
     steps:
       - checkout
       - add_ssh_keys:
@@ -72,8 +67,10 @@ job-references:
             echo $HOSTNAME > ansible/hosts.ini
       - run:
           name: Run playbook
+          environment:
+            - ANSIBLE_HOST_KEY_CHECKING: False
           command: |
-            ansible-playbook ansible/deployment.yml -i ansible/hosts.ini -e ansible_port=$SSH_PORT -e ansible_user=$SSH_USER -e sitename=$SITENAME
+            ansible-playbook ansible/deploy.yml -i ansible/hosts.ini -u ${SSH_USER} -e ansible_port=${SSH_PORT} -e sitename=${<< parameters.sitename >>} -e workspace=${PWD}/ -v
                   
 
 jobs:
@@ -86,15 +83,19 @@ jobs:
   deploy_dev:
     executor:
       name: deploy
-    environment:
-      - SITENAME: $SITENAME_DEV
+    parameters:
+      sitename:
+        type: env_var_name
+        default: SITENAME_DEV
     <<: *deploy_job
 
   deploy_prd:
     executor:
       name: deploy
-    environment:
-      - SITENAME: $SITENAME_PRD
+    parameters:
+      sitename:
+        type: env_var_name
+        default: SITENAME_PRD
     <<: *deploy_job
 
 workflows:
@@ -107,8 +108,8 @@ workflows:
             - php73-test
           filters:
             branches:
-              only:
-                - develop
+              ignore:
+                - master
       - deploy_prd:
           requires:
             - php73-test
