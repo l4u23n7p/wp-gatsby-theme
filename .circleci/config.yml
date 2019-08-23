@@ -3,11 +3,10 @@
 version: 2.1
 
 executors:
-  deploy_env:
+  deploy:
     docker:
-      - image: ubuntu:latest
-    environment:
-      - THEME_NAME: "wp-gatsby-theme"
+      - image: circleci/python:3.7
+  
 
 job-references:
   mysql_image: &mysql_image circleci/mysql:8.0.0
@@ -52,6 +51,10 @@ job-references:
           path: test-results
 
   deploy_job: &deploy_job
+    environment:
+      - ANSIBLE_HOST_KEY_CHECKING: False
+      - ANSIBLE_LOCAL_TEMP: /home/circleci/.ansible/tmp
+      - ANSIBLE_REMOTE_TEMP: /home/circleci/.ansible/tmp
     steps:
       - checkout
       - add_ssh_keys:
@@ -59,15 +62,19 @@ job-references:
             - "16:da:86:fe:b2:e3:73:84:3b:04:e1:f6:1e:e0:93:a4"
       - run:
           name: Install Dependencies
-          command: apt update && apt install -y openssh-client
-      - run:
-          name: Scan Host
-          command: ssh-keyscan -H $SFTP_HOSTNAME >> ~/.ssh/known_hosts
-      - run:
-          name: Transfert theme file
           command: |
-            WP_HOME=$(set | grep WP_ROOT_$ENV | awk -F "=" '{print $2}')
-            scp -r -P $SFTP_PORT -oStrictHostKeyChecking=no $(pwd)/* $SFTP_USER@$SFTP_HOSTNAME:$WP_HOME/wp-content/themes/$THEME_NAME
+            sudo apt update
+            sudo apt install rsync
+            pip install --user ansible
+      - run:
+          name: Build inventory
+          command: |
+            echo $HOSTNAME > ansible/hosts.ini
+      - run:
+          name: Run playbook
+          command: |
+            ansible-playbook ansible/deployment.yml -i ansible/hosts.ini -e ansible_port=$SSH_PORT -e ansible_user=$SSH_USER -e sitename=$SITENAME
+                  
 
 jobs:
   php73-test:
@@ -78,16 +85,16 @@ jobs:
 
   deploy_dev:
     executor:
-      name: deploy_env
+      name: deploy
     environment:
-      - ENV: DEV
+      - SITENAME: $SITENAME_DEV
     <<: *deploy_job
 
-  deploy_prod:
+  deploy_prd:
     executor:
-      name: deploy_env
+      name: deploy
     environment:
-      - ENV: PROD
+      - SITENAME: $SITENAME_PRD
     <<: *deploy_job
 
 workflows:
@@ -100,16 +107,12 @@ workflows:
             - php73-test
           filters:
             branches:
-              ignore:
-                - master
+              only:
                 - develop
-                - /feature\/.*(circleci).*/
-      - deploy_prod:
+      - deploy_prd:
           requires:
             - php73-test
           filters:
             branches:
               only:
                 - master
-                - develop
-              ignore: /feature\/.*(circleci).*/
