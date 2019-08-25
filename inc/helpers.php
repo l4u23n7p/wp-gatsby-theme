@@ -228,3 +228,17 @@ function settings_input_checkbox( $setting, $name, $default = 0, $desc = "" ) {
 	$value = wp_gatsby_theme_get_setting( $setting, $name, $default);
     echo "<input id='{$setting}_{$name}' name='{$setting}[{$name}]' type='checkbox' class='code' value='1' " . checked( 1, $value, false ) . " /> $desc";
 }
+
+function settings_input_select( $setting, $name, $choices, $default = null, $desc = "" ) {
+	$value = wp_gatsby_theme_get_setting( $setting, $name, $default);
+	$options_value = '';
+
+	foreach ($choices as $key => $text) {
+		$options_value .= sprintf('<option value="%s" %s>%s</option>', $key, selected( $value, $key, false ), $text);
+	}
+
+	echo "
+	<select id='{$setting}_{$name}' name='{$setting}[{$name}]'>
+		{$options_value}
+	</select> $desc";
+}

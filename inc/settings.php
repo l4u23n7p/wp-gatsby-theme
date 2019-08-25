@@ -33,6 +33,8 @@ function plugin_admin_init() {
     
     add_settings_field( 'wp_gatsby_theme_deploy_manual', 'Manual Deploy', 'wp_gatsby_theme_deploy_manual_callback', 'theme-settings', 'wp_gatsby_theme_deploy_settings_section' );
     
+    add_settings_field( 'wp_gatsby_theme_deploy_cron', 'CRON Deploy', 'wp_gatsby_theme_deploy_cron_callback', 'theme-settings', 'wp_gatsby_theme_deploy_settings_section' );
+    
     // JWT Auth settings
     register_setting(
         'theme-settings',
@@ -69,6 +71,31 @@ function wp_gatsby_theme_deploy_manual_callback() {
 
 function wp_gatsby_theme_deploy_auto_callback() {
     settings_input_checkbox( 'wp_gatsby_theme_deploy_settings', 'auto', 0, 'Check to enable auto deploy on post publication (page, article, project, ...)' );
+}
+
+function wp_gatsby_theme_deploy_cron_callback() {
+    $choices = array(
+        'disable' => 'Disable'
+    );
+    $schedules = wp_get_schedules(  );
+    uasort($schedules, 'sort_schedules');
+	foreach ($schedules as $key => $schedule) {
+        $choices[$key] = $schedule['display'];
+	}
+    settings_input_select( 'wp_gatsby_theme_deploy_settings', 'cron', $choices, 'disable' );
+}
+
+function sort_schedules($a, $b) {
+    $interval_a = $a['interval'];
+    $interval_b = $b['interval'];
+
+    if ( $interval_a > $interval_b) {
+        return 1;
+    } elseif ($interval_a < $interval_b) {
+        return -1;
+    } else {
+        return 0;
+    }
 }
 
 function wp_gatsby_theme_deploy_hook_callback() {
@@ -121,6 +148,10 @@ function deploy_options_validate( $options ) {
     $options['hook'] = validate_url( trim( $options['hook'] ), 'Deploy Hook value is invalid');
     $options['status_image'] = validate_url( trim( $options['status_image'] ), 'Status Image value is invalid', null, true);
     $options['status_link'] = validate_url( trim( $options['status_link'] ), 'Status Link value is invalid', null, true);
+
+    if ( $option['cron'] !== get_deploy_settings( 'cron' ) ) {
+        update_option( 'update_deploy_cron', true );
+    }
 
     return $options;
 }
