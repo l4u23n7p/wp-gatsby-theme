@@ -1,7 +1,11 @@
 <?php
 
+function get_jwt_settings( $option = null ) {
+    return wp_gatsby_theme_get_settings('wp_gatsby_theme_jwt_settings', $option );
+}
+
 function update_jwt_expire( $value ) {
-    $jwt_expire = get_jwt_option( 'expire' );
+    $jwt_expire = get_jwt_settings( 'expire' );
         
     if( $jwt_expire != null ) {
         $value = time() + parse_expire_time( $jwt_expire );
@@ -10,16 +14,6 @@ function update_jwt_expire( $value ) {
     return $value;
 }
 add_filter( 'jwt_auth_expire', 'update_jwt_expire' );
-
-function get_jwt_option( $option ) {
-    $jwt_options = get_option( 'wp_gatsby_theme_jwt_settings' );
-
-    if ( $jwt_options && isset( $jwt_options[$option] ) ) {
-        return $jwt_options[$option];
-    }
-    
-    return null;
-}
     
 function parse_expire_time( $time ) {
     $units = array(

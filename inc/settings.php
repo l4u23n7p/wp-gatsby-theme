@@ -140,37 +140,3 @@ function validate_url($value, $error, $default = null, $nullable = false) {
 
     return $value;
 }
-
-/**
- * Settings Hook
- */
-
-function run_deploy_theme() {
-    check_ajax_referer( 'manual-deploy', '_nonce' );
-    
-    $option = get_option( 'wp_gatsby_theme_deploy_settings' );
-    
-    if ( $option && isset( $option['hook'] ) && $option['hook'] != null ) {
-        $res = wp_remote_post( $option['hook'] );
-        
-        if ( is_wp_error( $res ) ) {
-            echo $res->get_error_message();
-            $notice = array(
-                'type'  =>   'error',
-                'msg'   =>    $res->get_error_message()
-            );
-            wp_gatsby_theme_add_notices( $notice );
-        } else { 
-            echo json_encode( $res );
-            $notice = array(
-                'type'  =>   'success',
-                'msg'   =>    __( 'Manual deployment triggered !', 'wp-gatsby-theme' )
-            );
-            wp_gatsby_theme_add_notices( $notice );
-        }
-    } else {
-        echo 'No Deploy Hook';
-    }
-    wp_die();
-}
-add_action( 'wp_ajax_deploy-theme', 'run_deploy_theme' );

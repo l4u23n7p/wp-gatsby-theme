@@ -170,6 +170,20 @@ function wp_gatsby_theme_update_config( $rules = array() ) {
 	return $result;
 }
 
+function wp_gatsby_theme_get_settings( $settings, $key = null ) {
+	$settings_value = get_option( $settings, null );
+
+    if ( is_null( $key ) ) {
+        return $settings_value;
+    }
+
+    if ( isset( $settings_value[$key] ) ) {
+        return $settings_value[$key];
+    }
+
+    return null;
+}
+
 /**
  * Settings Helpers
  */
