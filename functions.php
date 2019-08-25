@@ -70,6 +70,8 @@ function activate_wp_gatsby_theme() {
     if( is_plugin_active( 'jwt-authentication-for-wp-rest-api/jwt-auth.php' ) ) {
         activate_jwt_auth();
     }
+
+    register_cron_deploy();
 }
 add_action( 'after_switch_theme', 'activate_wp_gatsby_theme' );
 
@@ -78,12 +80,15 @@ function deactivate_wp_gatsby_theme() {
     unregister_setting( 'theme-settings', 'wp_gatsby_theme_jwt_settings' );
     delete_option( 'wp_gatsby_theme_deploy_settings' );
     delete_option( 'wp_gatsby_theme_jwt_settings' );
+    delete_option( 'update_deploy_cron' );
 
     include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
     if( is_plugin_active( 'jwt-authentication-for-wp-rest-api/jwt-auth.php' ) ) {
         deactivate_jwt_auth();
     }
+    
+    unregister_cron_deploy();
 }
 add_action( 'switch_theme', 'deactivate_wp_gatsby_theme' );
 

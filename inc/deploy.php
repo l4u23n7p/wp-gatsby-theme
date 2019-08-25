@@ -63,3 +63,59 @@ function run_manual_deploy() {
     trigger_deploy( 'Manual deployment triggered !' );
 }
 add_action( 'wp_ajax_deploy-theme', 'run_manual_deploy' );
+
+/**
+ * CRON deploy
+ */
+
+function custom_cron_recurrence( $schedules ) {
+    if ( !isset( $schedules['twicehourly'] ) ) {
+        $schedules['twicehourly'] = array(
+            'interval' => 30 * MINUTE_IN_SECONDS,
+            'display' => __( 'Twice Hourly' )
+        );
+    }
+    if ( !isset( $schedules['weekly'] ) ) {
+        $schedules['weekly'] = array(
+            'interval' => WEEK_IN_SECONDS,
+            'display' => __( 'Once Weekly' )
+        );
+    }
+
+    return $schedules;
+}
+add_filter( 'cron_schedules', 'custom_cron_recurrence' );
+
+// add cron hook
+add_action( 'wp_gatsby_theme_cron_deploy', 'trigger_deploy' );
+
+function register_cron_deploy() {
+   
+    $interval = get_deploy_settings( 'cron' );
+    
+    if ( is_null( $interval ) || $interval == 'disable' ) {
+        return;
+    }
+    
+    if ( ! wp_next_scheduled( 'wp_gatsby_theme_cron_deploy' ) ) {
+        wp_schedule_event( time(), $interval, 'wp_gatsby_theme_cron_deploy' );
+    }
+}
+
+function unregister_cron_deploy() {
+
+    $timestamp = wp_next_scheduled( 'wp_gatsby_theme_cron_deploy' );
+
+    if ( $timestamp ) {
+        wp_unschedule_event( $timestamp, 'wp_gatsby_theme_cron_deploy' );
+    }
+ }
+
+function update_cron_deploy() {
+    if ( get_option( 'update_deploy_cron', false ) ) {
+        unregister_cron_deploy();
+        register_cron_deploy();
+        update_option( 'update_deploy_cron', false );
+    }
+}
+add_action( 'update_option_wp_gatsby_theme_deploy_settings', 'update_cron_deploy' );
