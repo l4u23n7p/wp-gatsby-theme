@@ -19,12 +19,11 @@ add_theme_support( 'html5' ,
     )
 );
 
-function load_custom_wp_admin_style()
-{
-    wp_register_style('custom_wp_admin_css', get_template_directory_uri() . '/css/custom-admin-style.css', false, '20190507145010');
-    wp_enqueue_style('custom_wp_admin_css');
+function load_custom_wp_admin_style() {
+    wp_register_style( 'custom_wp_admin_css', get_template_directory_uri() . '/css/custom-admin-style.css', false, '20190507145010' );
+    wp_enqueue_style( 'custom_wp_admin_css' );
 }
-add_action('admin_enqueue_scripts', 'load_custom_wp_admin_style');
+add_action( 'admin_enqueue_scripts', 'load_custom_wp_admin_style' );
 
 function wp_gatsby_theme_status_toolbar() {
 	global $wp_admin_bar;
@@ -32,8 +31,8 @@ function wp_gatsby_theme_status_toolbar() {
 	if ( !is_super_admin() || !is_admin_bar_showing() )
 		return;
 	
-	$status_img = get_option( 'wp_gatsby_theme_deploy_settings' )['status_image'];
-    $status_link = get_option( 'wp_gatsby_theme_deploy_settings' )['status_link'];
+	$status_img = get_deploy_settings( 'status_image' );
+    $status_link = get_deploy_settings( 'status_link' );
     
     if( isset( $status_img ) ) {
         $wp_admin_bar->add_node(
@@ -51,17 +50,6 @@ function wp_gatsby_theme_status_toolbar() {
     }
 }
 add_action( 'wp_before_admin_bar_render', 'wp_gatsby_theme_status_toolbar' ); 
-
-function wp_gatsby_theme_auto_deploy( $new_status, $old_status, $post ) {
-    $option = get_option( 'wp_gatsby_theme_deploy_settings' );
-    
-    if ( $option && isset( $option['hook'] ) && $option['hook'] != null && isset( $option['auto'] ) && $option['auto'] == 1 ) {
-        if( $new_status == 'publish' ) {
-            wp_remote_post( $option['hook'] );
-        }
-    }
-}
-add_action( 'transition_post_status', 'wp_gatsby_theme_auto_deploy', 10, 3 );
 
 // Fonction pour modifier l'adresse email de l'expéditeur
 function wpm_email_from( $original_email_address ) {
@@ -82,18 +70,25 @@ function activate_wp_gatsby_theme() {
     if( is_plugin_active( 'jwt-authentication-for-wp-rest-api/jwt-auth.php' ) ) {
         activate_jwt_auth();
     }
+
+    register_cron_deploy();
 }
 add_action( 'after_switch_theme', 'activate_wp_gatsby_theme' );
 
 function deactivate_wp_gatsby_theme() {
+    unregister_setting( 'theme-settings', 'wp_gatsby_theme_deploy_settings' );
+    unregister_setting( 'theme-settings', 'wp_gatsby_theme_jwt_settings' );
     delete_option( 'wp_gatsby_theme_deploy_settings' );
     delete_option( 'wp_gatsby_theme_jwt_settings' );
+    delete_option( 'update_deploy_cron' );
 
     include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
     if( is_plugin_active( 'jwt-authentication-for-wp-rest-api/jwt-auth.php' ) ) {
         deactivate_jwt_auth();
     }
+    
+    unregister_cron_deploy();
 }
 add_action( 'switch_theme', 'deactivate_wp_gatsby_theme' );
 
@@ -203,11 +198,14 @@ require get_template_directory() . '/custom-fields/taxonomies.php';
 // Load Rest API changes
 require get_template_directory() . '/inc/api-changes.php';
 
-// Laod Options page
-require get_template_directory() . '/inc/options.php';
+// Load Settings page
+require get_template_directory() . '/inc/settings.php';
 
 // Load JWT Auth configuration
 require get_template_directory() . '/inc/jwt-auth.php';
+
+// Load Deploy configuration
+require get_template_directory() . '/inc/deploy.php';
 
 // Load helpers function
 require get_template_directory() . '/inc/helpers.php';

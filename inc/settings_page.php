@@ -12,8 +12,8 @@ if ( isset( $_GET['settings-updated'] ) ) {
     <?php
     settings_errors( 'wp_gatsby_theme_messages' );
     
-    $status_img = get_option( 'wp_gatsby_theme_deploy_settings' )['status_image'];
-    $status_link = get_option( 'wp_gatsby_theme_deploy_settings' )['status_link'];
+    $status_img = get_deploy_settings( 'status_image' );
+    $status_link = get_deploy_settings( 'status_link' );
     ?>
     <?php if ( isset( $status_img ) ): ?>
         <div>
@@ -38,7 +38,7 @@ if ( isset( $_GET['settings-updated'] ) ) {
 </div>
 
 <script type="text/javascript">
-    function run_manual_deploy() {
+    function trigger_manual_deploy() {
         var data = {
             action: 'deploy-theme',
             _nonce: '<?php echo wp_create_nonce( "manual-deploy" ); ?>'

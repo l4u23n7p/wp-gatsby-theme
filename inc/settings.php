@@ -7,10 +7,10 @@ function add_theme_settings_page() {
 add_action( 'admin_menu', 'add_theme_settings_page' );
 
 function theme_settings_page() {
-    include( 'options_page.php' );
+    include( 'settings_page.php' );
 }
 
-function plugin_admin_init(){
+function plugin_admin_init() {
 
     // Deploy settings
     register_setting(
@@ -32,6 +32,8 @@ function plugin_admin_init(){
     add_settings_field( 'wp_gatsby_theme_deploy_auto', 'Auto Deploy', 'wp_gatsby_theme_deploy_auto_callback', 'theme-settings', 'wp_gatsby_theme_deploy_settings_section' );
     
     add_settings_field( 'wp_gatsby_theme_deploy_manual', 'Manual Deploy', 'wp_gatsby_theme_deploy_manual_callback', 'theme-settings', 'wp_gatsby_theme_deploy_settings_section' );
+    
+    add_settings_field( 'wp_gatsby_theme_deploy_cron', 'CRON Deploy', 'wp_gatsby_theme_deploy_cron_callback', 'theme-settings', 'wp_gatsby_theme_deploy_settings_section' );
     
     // JWT Auth settings
     register_setting(
@@ -64,28 +66,53 @@ function jwt_settings_text() {
  */
 
 function wp_gatsby_theme_deploy_manual_callback() {
-    option_input_button( 'wp_gatsby_theme_deploy_settings', 'manual', 'run_manual_deploy', 'Deploy' );
+    settings_input_button( 'wp_gatsby_theme_deploy_settings', 'manual', 'trigger_manual_deploy', 'Deploy' );
 }
 
 function wp_gatsby_theme_deploy_auto_callback() {
-    option_input_checkbox( 'wp_gatsby_theme_deploy_settings', 'auto', 0, 'Check to enable auto deploy' );
+    settings_input_checkbox( 'wp_gatsby_theme_deploy_settings', 'auto', 0, 'Check to enable auto deploy on post publication (page, article, project, ...)' );
+}
+
+function wp_gatsby_theme_deploy_cron_callback() {
+    $choices = array(
+        'disable' => 'Disable'
+    );
+    $schedules = wp_get_schedules(  );
+    uasort($schedules, 'sort_schedules');
+	foreach ($schedules as $key => $schedule) {
+        $choices[$key] = $schedule['display'];
+	}
+    settings_input_select( 'wp_gatsby_theme_deploy_settings', 'cron', $choices, 'disable' );
+}
+
+function sort_schedules($a, $b) {
+    $interval_a = $a['interval'];
+    $interval_b = $b['interval'];
+
+    if ( $interval_a > $interval_b) {
+        return 1;
+    } elseif ($interval_a < $interval_b) {
+        return -1;
+    } else {
+        return 0;
+    }
 }
 
 function wp_gatsby_theme_deploy_hook_callback() {
-    option_input_string( 'wp_gatsby_theme_deploy_settings', 'hook', null, '', 80 );
+    settings_input_string( 'wp_gatsby_theme_deploy_settings', 'hook', null, '', 80 );
 }
 
 function wp_gatsby_theme_deploy_status_image_callback() {
-    option_input_string( 'wp_gatsby_theme_deploy_settings', 'status_image', null, '', 80 );
+    settings_input_string( 'wp_gatsby_theme_deploy_settings', 'status_image', null, '', 80 );
 }
 
 function wp_gatsby_theme_deploy_status_link_callback() {
-    option_input_string( 'wp_gatsby_theme_deploy_settings', 'status_link', null, '', 80 );
+    settings_input_string( 'wp_gatsby_theme_deploy_settings', 'status_link', null, '', 80 );
 }
 
 function wp_gatsby_theme_jwt_expire_callback() {
-    option_input_string( 'wp_gatsby_theme_jwt_settings', 'expire', '7D', 'Time in seconds' );
-    option_input_help(
+    settings_input_string( 'wp_gatsby_theme_jwt_settings', 'expire', '7D', 'Time in seconds' );
+    settings_input_help(
         'table',
         array(
             'title' => 'Time Helpers Constant',
@@ -99,7 +126,7 @@ function wp_gatsby_theme_jwt_expire_callback() {
             )
         )
     );
-    option_input_help( 'text', 'Helpers Constant must be use from largest to smallest value' );
+    settings_input_help( 'text', 'Helpers Constant must be use from largest to smallest value' );
 }
 
 /**
@@ -122,6 +149,10 @@ function deploy_options_validate( $options ) {
     $options['status_image'] = validate_url( trim( $options['status_image'] ), 'Status Image value is invalid', null, true);
     $options['status_link'] = validate_url( trim( $options['status_link'] ), 'Status Link value is invalid', null, true);
 
+    if ( $option['cron'] !== get_deploy_settings( 'cron' ) ) {
+        update_option( 'update_deploy_cron', true );
+    }
+
     return $options;
 }
 
@@ -140,37 +171,3 @@ function validate_url($value, $error, $default = null, $nullable = false) {
 
     return $value;
 }
-
-/**
- * Settings Hook
- */
-
-function run_deploy_theme() {
-    check_ajax_referer( 'manual-deploy', '_nonce' );
-    
-    $option = get_option( 'wp_gatsby_theme_deploy_settings' );
-    
-    if ( $option && isset( $option['hook'] ) && $option['hook'] != null ) {
-        $res = wp_remote_post( $option['hook'] );
-        
-        if ( is_wp_error( $res ) ) {
-            echo $res->get_error_message();
-            $notice = array(
-                'type'  =>   'error',
-                'msg'   =>    $res->get_error_message()
-            );
-            wp_gatsby_theme_add_notices( $notice );
-        } else { 
-            echo json_encode( $res );
-            $notice = array(
-                'type'  =>   'success',
-                'msg'   =>    __( 'Manual deployment triggered !', 'wp-gatsby-theme' )
-            );
-            wp_gatsby_theme_add_notices( $notice );
-        }
-    } else {
-        echo 'No Deploy Hook';
-    }
-    wp_die();
-}
-add_action( 'wp_ajax_deploy-theme', 'run_deploy_theme' );
