@@ -203,8 +203,8 @@ require get_template_directory() . '/custom-fields/taxonomies.php';
 // Load Rest API changes
 require get_template_directory() . '/inc/api-changes.php';
 
-// Laod Options page
-require get_template_directory() . '/inc/options.php';
+// Load Settings page
+require get_template_directory() . '/inc/settings.php';
 
 // Load JWT Auth configuration
 require get_template_directory() . '/inc/jwt-auth.php';

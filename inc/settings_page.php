@@ -38,7 +38,7 @@ if ( isset( $_GET['settings-updated'] ) ) {
 </div>
 
 <script type="text/javascript">
-    function run_manual_deploy() {
+    function trigger_manual_deploy() {
         var data = {
             action: 'deploy-theme',
             _nonce: '<?php echo wp_create_nonce( "manual-deploy" ); ?>'

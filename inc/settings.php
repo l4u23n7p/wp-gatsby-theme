@@ -7,10 +7,10 @@ function add_theme_settings_page() {
 add_action( 'admin_menu', 'add_theme_settings_page' );
 
 function theme_settings_page() {
-    include( 'options_page.php' );
+    include( 'settings_page.php' );
 }
 
-function plugin_admin_init(){
+function plugin_admin_init() {
 
     // Deploy settings
     register_setting(
@@ -64,28 +64,28 @@ function jwt_settings_text() {
  */
 
 function wp_gatsby_theme_deploy_manual_callback() {
-    option_input_button( 'wp_gatsby_theme_deploy_settings', 'manual', 'run_manual_deploy', 'Deploy' );
+    settings_input_button( 'wp_gatsby_theme_deploy_settings', 'manual', 'trigger_manual_deploy', 'Deploy' );
 }
 
 function wp_gatsby_theme_deploy_auto_callback() {
-    option_input_checkbox( 'wp_gatsby_theme_deploy_settings', 'auto', 0, 'Check to enable auto deploy' );
+    settings_input_checkbox( 'wp_gatsby_theme_deploy_settings', 'auto', 0, 'Check to enable auto deploy on post publication (page, article, project, ...)' );
 }
 
 function wp_gatsby_theme_deploy_hook_callback() {
-    option_input_string( 'wp_gatsby_theme_deploy_settings', 'hook', null, '', 80 );
+    settings_input_string( 'wp_gatsby_theme_deploy_settings', 'hook', null, '', 80 );
 }
 
 function wp_gatsby_theme_deploy_status_image_callback() {
-    option_input_string( 'wp_gatsby_theme_deploy_settings', 'status_image', null, '', 80 );
+    settings_input_string( 'wp_gatsby_theme_deploy_settings', 'status_image', null, '', 80 );
 }
 
 function wp_gatsby_theme_deploy_status_link_callback() {
-    option_input_string( 'wp_gatsby_theme_deploy_settings', 'status_link', null, '', 80 );
+    settings_input_string( 'wp_gatsby_theme_deploy_settings', 'status_link', null, '', 80 );
 }
 
 function wp_gatsby_theme_jwt_expire_callback() {
-    option_input_string( 'wp_gatsby_theme_jwt_settings', 'expire', '7D', 'Time in seconds' );
-    option_input_help(
+    settings_input_string( 'wp_gatsby_theme_jwt_settings', 'expire', '7D', 'Time in seconds' );
+    settings_input_help(
         'table',
         array(
             'title' => 'Time Helpers Constant',
@@ -99,7 +99,7 @@ function wp_gatsby_theme_jwt_expire_callback() {
             )
         )
     );
-    option_input_help( 'text', 'Helpers Constant must be use from largest to smallest value' );
+    settings_input_help( 'text', 'Helpers Constant must be use from largest to smallest value' );
 }
 
 /**

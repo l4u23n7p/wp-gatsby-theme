@@ -173,7 +173,13 @@ function wp_gatsby_theme_update_config( $rules = array() ) {
 /**
  * Settings Helpers
  */
-function option_input_help( $type, $args ) {
+
+function wp_gatsby_theme_get_setting( $setting, $name, $default = null ) {
+	$options = get_option( $setting );
+    return isset( $options[$name] ) ? $options[$name] : $default;
+}
+
+function settings_input_help( $type, $args ) {
     switch ( $type ) {
         case 'text':
             echo "<p>$args</p>";
@@ -195,18 +201,16 @@ function option_input_help( $type, $args ) {
     }
 }
 
-function option_input_string( $setting, $name, $default = null, $desc = "", $size = 40 ) {
-    $options = get_option( $setting );
-    $value = isset( $options[$name] ) ? $options[$name] : $default;
+function settings_input_string( $setting, $name, $default = null, $desc = "", $size = 40 ) {
+    $value = wp_gatsby_theme_get_setting( $setting, $name, $default);
     echo "<input id='{$setting}_{$name}' name='{$setting}[{$name}]' type='text' value='" . $value . "' size=$size /> $desc";
 }
 
-function option_input_button( $setting, $name, $action, $label, $desc = "" ) {
+function settings_input_button( $setting, $name, $action, $label, $desc = "" ) {
     echo "<input id='{$setting}_{$name}' name='{$setting}[{$name}]' type='button' onclick='$action()' value='$label' /> $desc";
 }
 
-function option_input_checkbox( $setting, $name, $default = 0, $desc = "" ) {
-    $options = get_option( $setting );
-    $value = isset( $options[$name] ) ? $options[$name] : $default;
+function settings_input_checkbox( $setting, $name, $default = 0, $desc = "" ) {
+	$value = wp_gatsby_theme_get_setting( $setting, $name, $default);
     echo "<input id='{$setting}_{$name}' name='{$setting}[{$name}]' type='checkbox' class='code' value='1' " . checked( 1, $value, false ) . " /> $desc";
 }
