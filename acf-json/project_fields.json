@@ -292,6 +292,32 @@
             ],
             "min": "",
             "max": ""
+          },
+          "layout_5d702258b356b": {
+            "key": "layout_5d702258b356b",
+            "name": "video",
+            "label": "Video",
+            "display": "block",
+            "sub_fields": [
+              {
+                "key": "field_5d70225eb356c",
+                "label": "Video",
+                "name": "video",
+                "type": "oembed",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "",
+                  "class": "",
+                  "id": ""
+                },
+                "width": "",
+                "height": ""
+              }
+            ],
+            "min": "",
+            "max": ""
           }
         },
         "button_label": "Ajouter un élément",
