@@ -1,0 +1,316 @@
+[
+  {
+    "key": "group_5d74f53c0aac4",
+    "title": "About Metadata",
+    "fields": [
+      {
+        "key": "field_5d73fd4dc5285",
+        "label": "Education",
+        "name": "education",
+        "type": "repeater",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "collapsed": "field_5d74e61e4410a",
+        "min": 0,
+        "max": 0,
+        "layout": "row",
+        "button_label": "",
+        "sub_fields": [
+          {
+            "key": "field_5d74e61e4410a",
+            "label": "Title",
+            "name": "title",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+          },
+          {
+            "key": "field_5d74e6384410b",
+            "label": "Date",
+            "name": "date",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+              {
+                "key": "field_5d74ecd095e08",
+                "label": "Start",
+                "name": "start",
+                "type": "date_picker",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "",
+                  "class": "",
+                  "id": ""
+                },
+                "display_format": "Y",
+                "return_format": "Y",
+                "first_day": 1
+              },
+              {
+                "key": "field_5d74ed1295e09",
+                "label": "End",
+                "name": "end",
+                "type": "date_picker",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "",
+                  "class": "",
+                  "id": ""
+                },
+                "display_format": "Y",
+                "return_format": "Y",
+                "first_day": 1
+              }
+            ]
+          },
+          {
+            "key": "field_5d74e6f54410c",
+            "label": "School",
+            "name": "school",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+              {
+                "key": "field_5d74e7114410d",
+                "label": "Name",
+                "name": "name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "maxlength": ""
+              },
+              {
+                "key": "field_5d74e7174410e",
+                "label": "Link",
+                "name": "link",
+                "type": "url",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "",
+                  "class": "",
+                  "id": ""
+                },
+                "default_value": "",
+                "placeholder": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "field_5d74e77e4410f",
+        "label": "Experiences",
+        "name": "experiences",
+        "type": "repeater",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "collapsed": "field_5d74e7af44110",
+        "min": 0,
+        "max": 0,
+        "layout": "row",
+        "button_label": "",
+        "sub_fields": [
+          {
+            "key": "field_5d74e7af44110",
+            "label": "Title",
+            "name": "title",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+          },
+          {
+            "key": "field_5d74e7ba44111",
+            "label": "Date",
+            "name": "date",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+              {
+                "key": "field_5d74ed9b1e3d5",
+                "label": "Start",
+                "name": "start",
+                "type": "date_picker",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "",
+                  "class": "",
+                  "id": ""
+                },
+                "display_format": "F Y",
+                "return_format": "F Y",
+                "first_day": 1
+              },
+              {
+                "key": "field_5d74edcf1e3d6",
+                "label": "Current",
+                "name": "current",
+                "type": "true_false",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                  "width": "",
+                  "class": "",
+                  "id": ""
+                },
+                "message": "",
+                "default_value": 1,
+                "ui": 1,
+                "ui_on_text": "",
+                "ui_off_text": ""
+              },
+              {
+                "key": "field_5d74ede81e3d7",
+                "label": "End",
+                "name": "end",
+                "type": "date_picker",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": [
+                  [
+                    {
+                      "field": "field_5d74edcf1e3d6",
+                      "operator": "!=",
+                      "value": "1"
+                    }
+                  ]
+                ],
+                "wrapper": {
+                  "width": "",
+                  "class": "",
+                  "id": ""
+                },
+                "display_format": "F Y",
+                "return_format": "F Y",
+                "first_day": 1
+              }
+            ]
+          },
+          {
+            "key": "field_5d74e7c444112",
+            "label": "Company",
+            "name": "company",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+          }
+        ]
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "theme_page",
+          "operator": "==",
+          "value": "about"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": [
+      "excerpt",
+      "discussion",
+      "comments",
+      "author",
+      "format",
+      "page_attributes",
+      "featured_image",
+      "categories",
+      "tags",
+      "send-trackbacks"
+    ],
+    "active": true,
+    "description": ""
+  }
+]
