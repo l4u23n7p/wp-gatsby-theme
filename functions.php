@@ -78,6 +78,7 @@ add_action( 'after_switch_theme', 'activate_wp_gatsby_theme' );
 function deactivate_wp_gatsby_theme() {
     unregister_setting( 'theme-settings', 'wp_gatsby_theme_deploy_settings' );
     unregister_setting( 'theme-settings', 'wp_gatsby_theme_jwt_settings' );
+    delete_option( 'wp_gatsby_theme_page_settings' );
     delete_option( 'wp_gatsby_theme_deploy_settings' );
     delete_option( 'wp_gatsby_theme_jwt_settings' );
     delete_option( 'update_deploy_cron' );
@@ -205,6 +206,9 @@ require get_template_directory() . '/inc/jwt-auth.php';
 
 // Load Deploy configuration
 require get_template_directory() . '/inc/deploy.php';
+
+// Load Page configuration
+require get_template_directory() . '/inc/theme_page.php';
 
 // Load helpers function
 require get_template_directory() . '/inc/helpers.php';

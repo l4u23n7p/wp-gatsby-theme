@@ -1,6 +1,5 @@
 <?php
 
-
 function add_theme_settings_page() {
     add_theme_page( __( 'Settings Page' ), __( 'Settings' ), 'manage_options', 'theme-settings', 'theme_settings_page' );
 }
@@ -11,6 +10,21 @@ function theme_settings_page() {
 }
 
 function plugin_admin_init() {
+
+    // Page settings
+    register_setting(
+        'theme-settings',
+        'wp_gatsby_theme_page_settings',
+        array(
+            'sanitize_callback' => 'page_options_validate'
+        )
+    );
+
+    add_settings_section( 'wp_gatsby_theme_page_settings_section', 'Page Settings', 'page_settings_text', 'theme-settings' );
+
+    add_settings_field( 'wp_gatsby_theme_page_home', 'Home page', 'wp_gatsby_theme_page_home_callback', 'theme-settings', 'wp_gatsby_theme_page_settings_section' );
+
+    add_settings_field( 'wp_gatsby_theme_page_about', 'About page', 'wp_gatsby_theme_page_about_callback', 'theme-settings', 'wp_gatsby_theme_page_settings_section' );
 
     // Deploy settings
     register_setting(
@@ -53,6 +67,10 @@ add_action( 'admin_init', 'plugin_admin_init' );
 /**
  * Section text
  */
+function page_settings_text() {
+    echo '<p>Special page used by theme</p>';
+}
+
 function deploy_settings_text() {
     echo '<p>Custom the way the theme is deploy with Gatsby.</p>';
 }
@@ -64,6 +82,27 @@ function jwt_settings_text() {
 /**
  * Settings Field callback
  */
+function wp_gatsby_theme_page_home_callback() {
+    $choices = array(
+        '' => ''
+    );
+    $pages = get_pages();
+	foreach ( $pages as $page ) {
+        $choices[$page->ID] = $page->post_title;
+	}
+    settings_input_select( 'wp_gatsby_theme_page_settings', 'home', $choices, '' );
+}
+
+function wp_gatsby_theme_page_about_callback() {
+    $choices = array(
+        '' => ''
+    );
+    $pages = get_pages();
+	foreach ($pages as $page) {
+        $choices[$page->ID] = $page->post_title;
+	}
+    settings_input_select( 'wp_gatsby_theme_page_settings', 'about', $choices, '' );
+}
 
 function wp_gatsby_theme_deploy_manual_callback() {
     settings_input_button( 'wp_gatsby_theme_deploy_settings', 'manual', 'trigger_manual_deploy', 'Deploy' );
@@ -132,6 +171,13 @@ function wp_gatsby_theme_jwt_expire_callback() {
 /**
  * Settings Sanitize callback
  */
+function page_options_validate( $options ) {
+    $options['home'] = intval( $options['home'] );
+    $options['about'] = intval( $options['about'] );
+    
+    return $options;
+}
+
 function jwt_options_validate( $options ) {
     $expire = trim( $options['expire'] );
     if( !preg_match( '/^(\d+Y)?(\d+MO)?(\d+W)?(\d+D)?(\d+H)?(\d+M)?(\d+)?$/', $expire ) ) {
@@ -145,9 +191,9 @@ function jwt_options_validate( $options ) {
 function deploy_options_validate( $options ) {
     $options['auto'] = intval( $options['auto'] );
 
-    $options['hook'] = validate_url( trim( $options['hook'] ), 'Deploy Hook value is invalid');
-    $options['status_image'] = validate_url( trim( $options['status_image'] ), 'Status Image value is invalid', null, true);
-    $options['status_link'] = validate_url( trim( $options['status_link'] ), 'Status Link value is invalid', null, true);
+    $options['hook'] = validate_url( trim( $options['hook'] ), 'Deploy Hook value is invalid' );
+    $options['status_image'] = validate_url( trim( $options['status_image'] ), 'Status Image value is invalid', null, true );
+    $options['status_link'] = validate_url( trim( $options['status_link'] ), 'Status Link value is invalid', null, true );
 
     if ( $option['cron'] !== get_deploy_settings( 'cron' ) ) {
         update_option( 'update_deploy_cron', true );
