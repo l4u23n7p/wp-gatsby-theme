@@ -70,10 +70,19 @@ function wp_rest_api_alter()
         )
     );
     register_rest_field(
-        'project',
-        'project_meta',
+        'page',
+        'acf_meta',
         array(
-            'get_callback' => 'get_project_meta',
+            'get_callback' => 'get_acf_meta',
+            'update_callback' => null,
+            'schema' => null,
+        )
+    );
+    register_rest_field(
+        'project',
+        'acf_meta',
+        array(
+            'get_callback' => 'get_acf_meta',
             'update_callback' => null,
             'schema' => null,
         )
@@ -152,7 +161,7 @@ function get_author_meta( $data, $field, $request )
     return $author_meta;
 }
 
-function get_project_meta( $data, $field, $request )
+function get_acf_meta( $data, $field, $request )
 {
     $fields = get_fields( $data['id'] );
     
