@@ -33,6 +33,15 @@ add_filter( 'rest_prepare_project', 'wp_api_encode_yoast', 10, 3 );
 
 function wp_rest_api_alter()
 {
+    register_rest_route(
+        'wp/v2',
+        '/theme-settings',
+        array(
+            'methods' => 'GET',
+            'callback' => 'get_theme_settings',
+        )
+    );
+
     register_rest_field(
         'post',
         'post_categories',
@@ -89,7 +98,12 @@ function wp_rest_api_alter()
     );
 }
 add_action( 'rest_api_init', 'wp_rest_api_alter' );
-            
+
+
+function get_theme_settings() {
+	return get_page_settings();
+}
+
 function get_post_categories( $data, $field, $request )
 {
     $formatted_categories = array();
