@@ -52,6 +52,15 @@ function wp_rest_api_alter()
         )
     );
     register_rest_field(
+        'project',
+        'project_filters',
+        array(
+            'get_callback' => 'get_project_filters',
+            'update_callback' => null,
+            'schema' => null,
+        )
+    );
+    register_rest_field(
         'post',
         'featured_media_url',
         array(
@@ -111,44 +120,32 @@ function get_theme_settings() {
 
 function get_post_categories( $data, $field, $request )
 {
-    $formatted_categories = array();
-    $categories = get_the_category( $data['id'] );
-    if ( $categories ) {
-        foreach ( $categories as $category ) {
+    return wp_gatsby_theme_get_terms( 'category', $data, $field, $request );
+}
+
+function get_project_filters( $data, $field, $request )
+{
+    return wp_gatsby_theme_get_terms( 'filter', $data, $field, $request );
+}
+
+function wp_gatsby_theme_get_terms($taxonomy, $data, $field, $request )
+{
+    $formatted_terms = array();
+    $terms = get_the_terms( $data['id'], $taxonomy );
+    if ( $terms ) {
+        foreach ( $terms as $term ) {
             array_push(
-                $formatted_categories,
+                $formatted_terms,
                 (object) [
-                    'text_color' => get_field( 'text_color', $category ),
-                    'color' => get_field( 'color', $category ),
-                    'title' => $category->name,
-                    'slug' => $category->slug,
+                    'text_color' => get_field( 'text_color', $term ),
+                    'color' => get_field( 'color', $term ),
+                    'title' => $term->name,
+                    'slug' => $term->slug,
                 ]
             );
         }
-        return $formatted_categories;
     }
-    return [];
-}
-
-function get_project_types( $data, $field, $request ) 
-{
-    $formatted_types = array();
-    $types = get_the_terms( $data['id'], 'type' );
-    if ( $types ) {
-        foreach ( $types as $type ) {
-            array_push(
-                $formatted_types,
-                (object) [
-                    'text_color' => get_field( 'text_color', $type ),
-                    'color' => get_field( 'color', $type ),
-                    'title' => $type->name,
-                    'slug' => $type->slug,
-                ] 
-            );
-        }
-        return $formatted_types;
-    }
-    return [];
+    return $formatted_terms;
 }
 
 function get_post_featured_media( $data, $field, $request )
