@@ -101,7 +101,12 @@ add_action( 'rest_api_init', 'wp_rest_api_alter' );
 
 
 function get_theme_settings() {
-	return get_page_settings();
+    $settings = array();
+
+    $settings['social'] = wp_gatsby_theme_get_settings( 'wp_gatsby_theme_social_settings' );
+    $settings['page'] = get_page_settings();
+    
+    return $settings;
 }
 
 function get_post_categories( $data, $field, $request )
