@@ -78,6 +78,8 @@ add_action( 'after_switch_theme', 'activate_wp_gatsby_theme' );
 function deactivate_wp_gatsby_theme() {
     unregister_setting( 'theme-settings', 'wp_gatsby_theme_deploy_settings' );
     unregister_setting( 'theme-settings', 'wp_gatsby_theme_jwt_settings' );
+    delete_option( 'wp_gatsby_theme_page_settings' );
+    delete_option( 'wp_gatsby_theme_social_settings' );
     delete_option( 'wp_gatsby_theme_deploy_settings' );
     delete_option( 'wp_gatsby_theme_jwt_settings' );
     delete_option( 'update_deploy_cron' );
@@ -188,12 +190,11 @@ add_action( 'admin_notices', 'wp_gatsby_theme_admin_notices' );
 // Load custom post types
 require get_template_directory() . '/post-types/project.php';
 
-// Load custom taxonomies
-require get_template_directory() . '/taxonomies/filter.php';
+// Load custom taxonomies display
+require get_template_directory() . '/taxonomies/display.php';
 
-// Load custom fields
-require get_template_directory() . '/custom-fields/project.php';
-require get_template_directory() . '/custom-fields/taxonomies.php';
+// Load custom taxonomy
+require get_template_directory() . '/taxonomies/filter.php';
 
 // Load Rest API changes
 require get_template_directory() . '/inc/api-changes.php';
@@ -206,6 +207,9 @@ require get_template_directory() . '/inc/jwt-auth.php';
 
 // Load Deploy configuration
 require get_template_directory() . '/inc/deploy.php';
+
+// Load Page configuration
+require get_template_directory() . '/inc/theme_page.php';
 
 // Load helpers function
 require get_template_directory() . '/inc/helpers.php';

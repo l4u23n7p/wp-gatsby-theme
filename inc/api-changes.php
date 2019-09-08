@@ -33,11 +33,29 @@ add_filter( 'rest_prepare_project', 'wp_api_encode_yoast', 10, 3 );
 
 function wp_rest_api_alter()
 {
+    register_rest_route(
+        'wp/v2',
+        '/theme-settings',
+        array(
+            'methods' => 'GET',
+            'callback' => 'get_theme_settings',
+        )
+    );
+
     register_rest_field(
         'post',
         'post_categories',
         array(
             'get_callback' => 'get_post_categories',
+            'update_callback' => null,
+            'schema' => null,
+        )
+    );
+    register_rest_field(
+        'project',
+        'project_filters',
+        array(
+            'get_callback' => 'get_project_filters',
             'update_callback' => null,
             'schema' => null,
         )
@@ -70,57 +88,64 @@ function wp_rest_api_alter()
         )
     );
     register_rest_field(
-        'project',
-        'project_meta',
+        'page',
+        'acf_meta',
         array(
-            'get_callback' => 'get_project_meta',
+            'get_callback' => 'get_acf_meta',
+            'update_callback' => null,
+            'schema' => null,
+        )
+    );
+    register_rest_field(
+        'project',
+        'acf_meta',
+        array(
+            'get_callback' => 'get_acf_meta',
             'update_callback' => null,
             'schema' => null,
         )
     );
 }
 add_action( 'rest_api_init', 'wp_rest_api_alter' );
-            
+
+
+function get_theme_settings() {
+    $settings = array();
+
+    $settings['social'] = wp_gatsby_theme_get_settings( 'wp_gatsby_theme_social_settings' );
+    $settings['page'] = get_page_settings();
+    
+    return $settings;
+}
+
 function get_post_categories( $data, $field, $request )
 {
-    $formatted_categories = array();
-    $categories = get_the_category( $data['id'] );
-    if ( $categories ) {
-        foreach ( $categories as $category ) {
+    return wp_gatsby_theme_get_terms( 'category', $data, $field, $request );
+}
+
+function get_project_filters( $data, $field, $request )
+{
+    return wp_gatsby_theme_get_terms( 'filter', $data, $field, $request );
+}
+
+function wp_gatsby_theme_get_terms($taxonomy, $data, $field, $request )
+{
+    $formatted_terms = array();
+    $terms = get_the_terms( $data['id'], $taxonomy );
+    if ( $terms ) {
+        foreach ( $terms as $term ) {
             array_push(
-                $formatted_categories,
+                $formatted_terms,
                 (object) [
-                    'text_color' => get_field( 'text_color', $category ),
-                    'color' => get_field( 'color', $category ),
-                    'title' => $category->name,
-                    'slug' => $category->slug,
+                    'text_color' => get_field( 'text_color', $term ),
+                    'color' => get_field( 'color', $term ),
+                    'title' => $term->name,
+                    'slug' => $term->slug,
                 ]
             );
         }
-        return $formatted_categories;
     }
-    return [];
-}
-
-function get_project_types( $data, $field, $request ) 
-{
-    $formatted_types = array();
-    $types = get_the_terms( $data['id'], 'type' );
-    if ( $types ) {
-        foreach ( $types as $type ) {
-            array_push(
-                $formatted_types,
-                (object) [
-                    'text_color' => get_field( 'text_color', $type ),
-                    'color' => get_field( 'color', $type ),
-                    'title' => $type->name,
-                    'slug' => $type->slug,
-                ] 
-            );
-        }
-        return $formatted_types;
-    }
-    return [];
+    return $formatted_terms;
 }
 
 function get_post_featured_media( $data, $field, $request )
@@ -152,7 +177,7 @@ function get_author_meta( $data, $field, $request )
     return $author_meta;
 }
 
-function get_project_meta( $data, $field, $request )
+function get_acf_meta( $data, $field, $request )
 {
     $fields = get_fields( $data['id'] );
     
