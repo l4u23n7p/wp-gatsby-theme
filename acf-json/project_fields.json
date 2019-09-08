@@ -1,10 +1,10 @@
 [
   {
-    "key": "group_5c3a00c425e00",
+    "key": "group_project_5c3a00c425e00",
     "title": "Project Metadata",
     "fields": [
       {
-        "key": "field_5c3a0190aef9b",
+        "key": "field_project_5c3a0190aef9b",
         "label": "Informations",
         "name": "informations",
         "type": "group",
@@ -19,7 +19,7 @@
         "layout": "block",
         "sub_fields": [
           {
-            "key": "field_5d70152cc0e88",
+            "key": "field_project_5d70152cc0e88",
             "label": "Date",
             "name": "date",
             "type": "text",
@@ -38,7 +38,7 @@
             "maxlength": ""
           },
           {
-            "key": "field_5d701546c0e89",
+            "key": "field_project_5d701546c0e89",
             "label": "Contributors",
             "name": "contributors",
             "type": "repeater",
@@ -50,14 +50,14 @@
               "class": "",
               "id": ""
             },
-            "collapsed": "field_5d70156ec0e8a",
+            "collapsed": "field_project_5d70156ec0e8a",
             "min": 1,
             "max": 0,
             "layout": "row",
             "button_label": "",
             "sub_fields": [
               {
-                "key": "field_5d70156ec0e8a",
+                "key": "field_project_5d70156ec0e8a",
                 "label": "Name",
                 "name": "name",
                 "type": "text",
@@ -76,7 +76,7 @@
                 "maxlength": ""
               },
               {
-                "key": "field_5d701591c0e8b",
+                "key": "field_project_5d701591c0e8b",
                 "label": "Link",
                 "name": "link",
                 "type": "url",
@@ -94,7 +94,7 @@
             ]
           },
           {
-            "key": "field_5d7015d9c0e8d",
+            "key": "field_project_5d7015d9c0e8d",
             "label": "Scope",
             "name": "scope",
             "type": "text",
@@ -115,7 +115,7 @@
         ]
       },
       {
-        "key": "field_5c3a01baaef9c",
+        "key": "field_project_5c3a01baaef9c",
         "label": "Description",
         "name": "description",
         "type": "wysiwyg",
@@ -134,7 +134,7 @@
         "delay": 1
       },
       {
-        "key": "field_5c3a01f8aef9d",
+        "key": "field_project_5c3a01f8aef9d",
         "label": "Stack",
         "name": "stack",
         "type": "repeater",
@@ -146,14 +146,14 @@
           "class": "",
           "id": ""
         },
-        "collapsed": "field_5d701693c0e8e",
+        "collapsed": "field_project_5d701693c0e8e",
         "min": 1,
         "max": 0,
         "layout": "table",
         "button_label": "",
         "sub_fields": [
           {
-            "key": "field_5d701693c0e8e",
+            "key": "field_project_5d701693c0e8e",
             "label": "Name",
             "name": "name",
             "type": "text",
@@ -172,7 +172,7 @@
             "maxlength": ""
           },
           {
-            "key": "field_5d7016a2c0e8f",
+            "key": "field_project_5d7016a2c0e8f",
             "label": "Version",
             "name": "version",
             "type": "text",
@@ -191,7 +191,7 @@
             "maxlength": ""
           },
           {
-            "key": "field_5d7016cdc0e90",
+            "key": "field_project_5d7016cdc0e90",
             "label": "Link",
             "name": "link",
             "type": "url",
@@ -209,7 +209,7 @@
         ]
       },
       {
-        "key": "field_5c3a17afac612",
+        "key": "field_project_5c3a17afac612",
         "label": "Screenshot",
         "name": "screenshot",
         "type": "flexible_content",
@@ -222,14 +222,14 @@
           "id": ""
         },
         "layouts": {
-          "layout_5cba2ab74a598": {
-            "key": "layout_5cba2ab74a598",
+          "layout_project_5cba2ab74a598": {
+            "key": "layout_project_5cba2ab74a598",
             "name": "image",
             "label": "Image",
             "display": "block",
             "sub_fields": [
               {
-                "key": "field_5d70172ac0e91",
+                "key": "field_project_5d70172ac0e91",
                 "label": "Image",
                 "name": "image",
                 "type": "image",
@@ -256,14 +256,14 @@
             "min": "",
             "max": ""
           },
-          "layout_5cba2c9b396ac": {
-            "key": "layout_5cba2c9b396ac",
+          "layout_project_5cba2c9b396ac": {
+            "key": "layout_project_5cba2c9b396ac",
             "name": "gallery",
             "label": "Gallery",
             "display": "block",
             "sub_fields": [
               {
-                "key": "field_5d7017bfc0e92",
+                "key": "field_project_5d7017bfc0e92",
                 "label": "Gallery",
                 "name": "gallery",
                 "type": "gallery",
@@ -293,14 +293,14 @@
             "min": "",
             "max": ""
           },
-          "layout_5d702258b356b": {
-            "key": "layout_5d702258b356b",
+          "layout_project_5d702258b356b": {
+            "key": "layout_project_5d702258b356b",
             "name": "video",
             "label": "Video",
             "display": "block",
             "sub_fields": [
               {
-                "key": "field_5d70225eb356c",
+                "key": "field_project_5d70225eb356c",
                 "label": "Video",
                 "name": "video",
                 "type": "oembed",
@@ -325,7 +325,7 @@
         "max": 1
       },
       {
-        "key": "field_5cba2b7a2e96e",
+        "key": "field_project_5cba2b7a2e96e",
         "label": "Source",
         "name": "source",
         "type": "flexible_content",
@@ -338,14 +338,14 @@
           "id": ""
         },
         "layouts": {
-          "layout_5cba2d02396af": {
-            "key": "layout_5cba2d02396af",
+          "layout_project_5cba2d02396af": {
+            "key": "layout_project_5cba2d02396af",
             "name": "github",
             "label": "Github",
             "display": "block",
             "sub_fields": [
               {
-                "key": "field_5d70189ec0e93",
+                "key": "field_project_5d70189ec0e93",
                 "label": "Url",
                 "name": "url",
                 "type": "url",
@@ -364,14 +364,14 @@
             "min": "",
             "max": ""
           },
-          "layout_5cba2be1c8454": {
-            "key": "layout_5cba2be1c8454",
+          "layout_project_5cba2be1c8454": {
+            "key": "layout_project_5cba2be1c8454",
             "name": "file",
             "label": "File",
             "display": "block",
             "sub_fields": [
               {
-                "key": "field_5d7018c0c0e94",
+                "key": "field_project_5d7018c0c0e94",
                 "label": "File",
                 "name": "file",
                 "type": "file",
@@ -393,14 +393,14 @@
             "min": "",
             "max": ""
           },
-          "layout_5cc1ee4fc674c": {
-            "key": "layout_5cc1ee4fc674c",
+          "layout_project_5cc1ee4fc674c": {
+            "key": "layout_project_5cc1ee4fc674c",
             "name": "demo",
             "label": "Demo",
             "display": "block",
             "sub_fields": [
               {
-                "key": "field_5d7018f6c0e95",
+                "key": "field_project_5d7018f6c0e95",
                 "label": "Demo",
                 "name": "demo",
                 "type": "url",
