@@ -193,7 +193,7 @@
                             "elements": "",
                             "min": 0,
                             "max": 2,
-                            "return_format": "object"
+                            "return_format": "id"
                           }
                         ],
                         "min": "",
@@ -224,7 +224,7 @@
                             "elements": "",
                             "min": "",
                             "max": 2,
-                            "return_format": "object"
+                            "return_format": "id"
                           },
                           {
                             "key": "field_home_5d7162fe3753f",
@@ -265,8 +265,8 @@
                     "key": "field_home_5d71648137543",
                     "label": "Social Media",
                     "name": "social_media",
-                    "type": "repeater",
-                    "instructions": "",
+                    "type": "checkbox",
+                    "instructions": "Social media to show",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -274,55 +274,18 @@
                       "class": "",
                       "id": ""
                     },
-                    "collapsed": "field_home_5d7164d337545",
-                    "min": 1,
-                    "max": 3,
-                    "layout": "row",
-                    "button_label": "",
-                    "sub_fields": [
-                      {
-                        "key": "field_home_5d7164d337545",
-                        "label": "Name",
-                        "name": "name",
-                        "type": "select",
-                        "instructions": "",
-                        "required": 0,
-                        "conditional_logic": 0,
-                        "wrapper": {
-                          "width": "",
-                          "class": "",
-                          "id": ""
-                        },
-                        "choices": {
-                          "linkedin": "Linkedin",
-                          "twitter": "Twitter",
-                          "github": "Github"
-                        },
-                        "default_value": [],
-                        "allow_null": 0,
-                        "multiple": 0,
-                        "ui": 1,
-                        "ajax": 0,
-                        "return_format": "value",
-                        "placeholder": ""
-                      },
-                      {
-                        "key": "field_home_5d7165b037546",
-                        "label": "Link",
-                        "name": "link",
-                        "type": "url",
-                        "instructions": "",
-                        "required": 1,
-                        "conditional_logic": 0,
-                        "wrapper": {
-                          "width": "",
-                          "class": "",
-                          "id": ""
-                        },
-                        "default_value": "",
-                        "placeholder": ""
-                      }
-                    ]
+                    "choices": {
+                      "mail": "Mail Address",
+                      "twitter": "Twitter Profile",
+                      "github": "Github Profile",
+                      "linkedin": "Linkedin Profile"
+                    },
+                    "allow_custom": 0,
+                    "default_value": [],
+                    "layout": "horizontal",
+                    "toggle": 1,
+                    "return_format": "value",
+                    "save_custom": 0
                   }
                 ],
                 "min": "",
