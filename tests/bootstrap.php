@@ -1,8 +1,6 @@
 <?php
 /**
- * PHPUnit bootstrap file
- *
- * @package Portfolio_Wp_Theme
+ * PHPUnit bootstrap file.
  */
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
@@ -20,29 +18,59 @@ if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 require_once $_tests_dir . '/includes/functions.php';
 
 /**
- * Registers theme
+ * Registers theme.
  */
 function _register_theme() {
-
-	$theme_dir = dirname( __DIR__ );
+	$theme_dir     = dirname( __DIR__ );
 	$current_theme = basename( $theme_dir );
-	$theme_root = dirname( $theme_dir );
+	$theme_root    = dirname( $theme_dir );
 
-	add_filter( 'theme_root', function() use ( $theme_root ) {
-		return $theme_root;
-	} );
+	add_filter(
+		'theme_root',
+		function () use ( $theme_root ) {
+			return $theme_root;
+		}
+	);
 
 	register_theme_directory( $theme_root );
 
-	add_filter( 'pre_option_template', function() use ( $current_theme ) {
-		return $current_theme;
-	});
-	add_filter( 'pre_option_stylesheet', function() use ( $current_theme ) {
-		return $current_theme;
-	});
+	add_filter(
+		'pre_option_template',
+		function () use ( $current_theme ) {
+			return $current_theme;
+		}
+	);
+	add_filter(
+		'pre_option_stylesheet',
+		function () use ( $current_theme ) {
+			return $current_theme;
+		}
+	);
+}
+
+/**
+ * Registers acf.
+ */
+function _register_acf() {
+	$theme_dir = dirname( __DIR__ );
+	$acf_dir   = realpath( $theme_dir . '/vendor/advanced-custom-fields-pro' );
+
+	if ( ! $acf_dir ) {
+		echo "Could not find $theme_dir/vendor/advanced-custom-fields-pro, you need to add ACF Pro in your vendor dir" . PHP_EOL;
+		exit( 1 );
+	}
+
+	$acf = realpath( $acf_dir . '/acf.php' );
+
+	if ( ! $acf ) {
+		echo "Could not find $acf_dir/acf.php, have you include ACF Pro ?" . PHP_EOL;
+		exit( 1 );
+	}
+
+	include $acf;
 }
 tests_add_filter( 'muplugins_loaded', '_register_theme' );
-
+tests_add_filter( 'muplugins_loaded', '_register_acf' );
 
 // Start up the WP testing environment.
 require $_tests_dir . '/includes/bootstrap.php';
