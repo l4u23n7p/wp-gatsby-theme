@@ -1,9 +1,9 @@
 <?php
 
 function wp_gatsby_theme_add_notices( $new ) {
-    $notices = get_option( 'wp_gatsby_theme_notices' );
-    $notices[] = $new;
-    update_option( 'wp_gatsby_theme_notices', $notices );
+	$notices   = get_option( 'wp_gatsby_theme_notices' );
+	$notices[] = $new;
+	update_option( 'wp_gatsby_theme_notices', $notices );
 }
 
 
@@ -39,12 +39,12 @@ function wp_gatsby_theme_insert_with_markers( $filename, $marker, $insertion, $d
 		$lines[] = rtrim( fgets( $fp ), "\r\n" );
 	}
 
-    // Split out the existing file into the preceding lines, and those that appear after the marker
-    if ( pathinfo($filename, PATHINFO_EXTENSION) == 'php' ) {
-        $php_marker = array_shift($lines);
-    } else {
-        $php_marker = "";
-    }
+	// Split out the existing file into the preceding lines, and those that appear after the marker
+	if ( pathinfo( $filename, PATHINFO_EXTENSION ) == 'php' ) {
+		$php_marker = array_shift( $lines );
+	} else {
+		$php_marker = '';
+	}
 	$pre_lines    = $post_lines = $existing_lines = array();
 	$found_marker = $found_end_marker = false;
 	foreach ( $lines as $line ) {
@@ -70,42 +70,41 @@ function wp_gatsby_theme_insert_with_markers( $filename, $marker, $insertion, $d
 		fclose( $fp );
 
 		return true;
-    }
-    
-    if ( empty( array_filter( $insertion ) ) ) {
-        $new_lines = array();
-    } else {
-        $new_lines = array_merge(
-            array( $start_marker ),
-            $insertion,
-            array( $end_marker )
-        );
-    }
+	}
 
-    if ( $insertbefore ) {
-        $new_file_data = implode(
-            "\n",
-            array_merge(
-                array( $php_marker ),
-                $new_lines,
-                $pre_lines,
-                $post_lines
-            )
-        );
-    } else {
-        // Generate the new file data
-        $new_file_data = implode(
-            "\n",
-            array_merge(
-                array( $php_marker ),
-                $pre_lines,
-                $new_lines,
-                $post_lines
-            )
-        );
-            
-    }
-    // Write to the start of the file, and truncate it to that length
+	if ( empty( array_filter( $insertion ) ) ) {
+		$new_lines = array();
+	} else {
+		$new_lines = array_merge(
+			array( $start_marker ),
+			$insertion,
+			array( $end_marker )
+		);
+	}
+
+	if ( $insertbefore ) {
+		$new_file_data = implode(
+			"\n",
+			array_merge(
+				array( $php_marker ),
+				$new_lines,
+				$pre_lines,
+				$post_lines
+			)
+		);
+	} else {
+		// Generate the new file data
+		$new_file_data = implode(
+			"\n",
+			array_merge(
+				array( $php_marker ),
+				$pre_lines,
+				$new_lines,
+				$post_lines
+			)
+		);
+	}
+	// Write to the start of the file, and truncate it to that length
 	fseek( $fp, 0 );
 	$bytes = fwrite( $fp, $new_file_data );
 	if ( $bytes ) {
@@ -120,25 +119,23 @@ function wp_gatsby_theme_insert_with_markers( $filename, $marker, $insertion, $d
 
 
 function wp_gatsby_theme_update_htaccess( $rules = array() ) {
-    $marker = 'wp-gatsby-theme';
-    $file = ABSPATH . '.htaccess';
+	$marker = 'wp-gatsby-theme';
+	$file   = ABSPATH . '.htaccess';
 
-    if ( ! is_file( $file ) ) {
+	if ( ! is_file( $file ) ) {
 		if ( ! touch( $file ) ) {
-			return new WP_Error( 'htaccess-io', 'ERROR: Unable to create the file ' . $file);
+			return new WP_Error( 'htaccess-io', 'ERROR: Unable to create the file ' . $file );
 		}
+	} elseif ( ! is_writable( $file ) ) {
+		return new WP_Error( 'htaccess-io', 'ERROR: Unable to get access to the file ' . $file );
 	}
-	elseif ( ! is_writable( $file ) ) {
-		return new WP_Error( 'htaccess-io', 'ERROR: Unable to get access to the file ' . $file);
-    }
-    
+
 	$result = wp_gatsby_theme_insert_with_markers( $file, $marker, $rules );
 
 	if ( $result || $result === 0 ) {
 		$result = 'The ' . $file . ' file has been updated';
-	}
-	else {
-		$result = new WP_Error( 'htaccess-io', 'ERROR: Unable to modify the file ' . $file);
+	} else {
+		$result = new WP_Error( 'htaccess-io', 'ERROR: Unable to modify the file ' . $file );
 	}
 
 	return $result;
@@ -146,25 +143,23 @@ function wp_gatsby_theme_update_htaccess( $rules = array() ) {
 
 
 function wp_gatsby_theme_update_config( $rules = array() ) {
-    $marker = 'wp-gatsby-theme';
-    $file = ABSPATH . 'wp-config.php';
+	$marker = 'wp-gatsby-theme';
+	$file   = ABSPATH . 'wp-config.php';
 
-    if ( ! is_file( $file ) ) {
+	if ( ! is_file( $file ) ) {
 		if ( ! touch( $file ) ) {
-			return new WP_Error( 'wp-config-io', 'ERROR: Unable to create the file ' . $file);
+			return new WP_Error( 'wp-config-io', 'ERROR: Unable to create the file ' . $file );
 		}
+	} elseif ( ! is_writable( $file ) ) {
+		return new WP_Error( 'wp-config-io', 'ERROR: Unable to get access to the file ' . $file );
 	}
-	elseif ( ! is_writable( $file ) ) {
-		return new WP_Error( 'wp-config-io', 'ERROR: Unable to get access to the file ' . $file);
-    }
-    
+
 	$result = wp_gatsby_theme_insert_with_markers( $file, $marker, $rules, '//', true );
 
 	if ( $result || $result === 0 ) {
 		$result = 'The ' . $file . ' file has been updated';
-	}
-	else {
-		$result = new WP_Error( 'wp-config-io', 'ERROR: Unable to modify the file ' . $file);
+	} else {
+		$result = new WP_Error( 'wp-config-io', 'ERROR: Unable to modify the file ' . $file );
 	}
 
 	return $result;
@@ -173,15 +168,15 @@ function wp_gatsby_theme_update_config( $rules = array() ) {
 function wp_gatsby_theme_get_settings( $settings, $key = null ) {
 	$settings_value = get_option( $settings, null );
 
-    if ( is_null( $key ) ) {
-        return $settings_value;
-    }
+	if ( is_null( $key ) ) {
+		return $settings_value;
+	}
 
-    if ( isset( $settings_value[$key] ) ) {
-        return $settings_value[$key];
-    }
+	if ( isset( $settings_value[ $key ] ) ) {
+		return $settings_value[ $key ];
+	}
 
-    return null;
+	return null;
 }
 
 /**
@@ -190,51 +185,51 @@ function wp_gatsby_theme_get_settings( $settings, $key = null ) {
 
 function wp_gatsby_theme_get_setting( $setting, $name, $default = null ) {
 	$options = get_option( $setting );
-    return isset( $options[$name] ) ? $options[$name] : $default;
+	return isset( $options[ $name ] ) ? $options[ $name ] : $default;
 }
 
 function settings_input_help( $type, $args ) {
-    switch ( $type ) {
-        case 'text':
-            echo "<p>$args</p>";
-            break;
-        
-        case 'table':
-            echo "<style> .input-help td { padding: 5px;}</style>";
-            echo "<h4>{$args['title']}</h4>";
-            echo "<table class='input-help'>";
-            foreach ( $args['value'] as $key => $value ) {
-                echo "<tr><td><code>$key</code></td><td>=></td><td>$value</td></tr>";
-            }
-            echo "</table>";
-            break;
-        
-        default:
-            # code...
-            break;
-    }
+	switch ( $type ) {
+		case 'text':
+			echo "<p>$args</p>";
+			break;
+
+		case 'table':
+			echo '<style> .input-help td { padding: 5px;}</style>';
+			echo "<h4>{$args['title']}</h4>";
+			echo "<table class='input-help'>";
+			foreach ( $args['value'] as $key => $value ) {
+				echo "<tr><td><code>$key</code></td><td>=></td><td>$value</td></tr>";
+			}
+			echo '</table>';
+			break;
+
+		default:
+			// code...
+			break;
+	}
 }
 
-function settings_input_string( $setting, $name, $default = null, $desc = "", $size = 40 ) {
-    $value = wp_gatsby_theme_get_setting( $setting, $name, $default);
-    echo "<input id='{$setting}_{$name}' name='{$setting}[{$name}]' type='text' value='" . $value . "' size=$size /> $desc";
+function settings_input_string( $setting, $name, $default = null, $desc = '', $size = 40 ) {
+	$value = wp_gatsby_theme_get_setting( $setting, $name, $default );
+	echo "<input id='{$setting}_{$name}' name='{$setting}[{$name}]' type='text' value='" . $value . "' size=$size /> $desc";
 }
 
-function settings_input_button( $setting, $name, $action, $label, $desc = "" ) {
-    echo "<input id='{$setting}_{$name}' name='{$setting}[{$name}]' type='button' onclick='$action()' value='$label' /> $desc";
+function settings_input_button( $setting, $name, $action, $label, $desc = '' ) {
+	echo "<input id='{$setting}_{$name}' name='{$setting}[{$name}]' type='button' onclick='$action()' value='$label' /> $desc";
 }
 
-function settings_input_checkbox( $setting, $name, $default = 0, $desc = "" ) {
-	$value = wp_gatsby_theme_get_setting( $setting, $name, $default);
-    echo "<input id='{$setting}_{$name}' name='{$setting}[{$name}]' type='checkbox' class='code' value='1' " . checked( 1, $value, false ) . " /> $desc";
+function settings_input_checkbox( $setting, $name, $default = 0, $desc = '' ) {
+	$value = wp_gatsby_theme_get_setting( $setting, $name, $default );
+	echo "<input id='{$setting}_{$name}' name='{$setting}[{$name}]' type='checkbox' class='code' value='1' " . checked( 1, $value, false ) . " /> $desc";
 }
 
-function settings_input_select( $setting, $name, $choices, $default = null, $desc = "" ) {
-	$value = wp_gatsby_theme_get_setting( $setting, $name, $default);
+function settings_input_select( $setting, $name, $choices, $default = null, $desc = '' ) {
+	$value         = wp_gatsby_theme_get_setting( $setting, $name, $default );
 	$options_value = '';
 
-	foreach ($choices as $key => $text) {
-		$options_value .= sprintf('<option value="%s" %s>%s</option>', $key, selected( $value, $key, false ), $text);
+	foreach ( $choices as $key => $text ) {
+		$options_value .= sprintf( '<option value="%s" %s>%s</option>', $key, selected( $value, $key, false ), $text );
 	}
 
 	echo "
