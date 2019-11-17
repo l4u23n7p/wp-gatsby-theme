@@ -211,8 +211,8 @@ function wp_gatsby_theme_jwt_expire_callback() {
  * Settings Sanitize callback
  */
 function page_options_validate( $options ) {
-	$options['home']  = intval( $options['home'] );
-	$options['about'] = intval( $options['about'] );
+	$options['home']  = wp_gatsby_theme_validate_page( $options['home'], 'Home page : Invalid page' );
+	$options['about'] = wp_gatsby_theme_validate_page( $options['about'], 'About page : Invalid page' );
 
 	return $options;
 }
@@ -227,7 +227,7 @@ function social_options_validate( $options ) {
 }
 
 function deploy_options_validate( $options ) {
-	$options['auto'] = intval( $options['auto'] );
+	$options['auto'] = wp_gatsby_theme_validate_boolean( $options['auto'] );
 
 	$options['hook']         = wp_gatsby_theme_validate_url( trim( $options['hook'] ), 'Deploy Hook url is invalid' );
 	$options['status_image'] = wp_gatsby_theme_validate_url( trim( $options['status_image'] ), 'Status Image url is invalid', null, true );
@@ -241,11 +241,7 @@ function deploy_options_validate( $options ) {
 }
 
 function jwt_options_validate( $options ) {
-	$expire = trim( $options['expire'] );
-	if ( ! preg_match( '/^(\d+Y)?(\d+MO)?(\d+W)?(\d+D)?(\d+H)?(\d+M)?(\d+)?$/', $expire ) ) {
-		add_settings_error( 'wp_gatsby_theme_messages', 'wp_gatsby_theme_settings_error_jwt_expire', __( 'JWT Expire Time value is invalid', 'wp-gatsby-theme' ), 'error' );
-		$options['expire'] = null;
-	}
+	$options['expire'] = wp_gatsby_theme_validate_jwt_expire( $options['expire'] );
 
 	return $options;
 }
@@ -260,14 +256,77 @@ function wp_gatsby_theme_validate_email( $value, $error, $default = null, $nulla
 
 function wp_gatsby_theme_validate( $filter, $value, $error, $default = null, $nullable = false ) {
 	if ( $nullable ) {
-		if ( $value == '' ) {
+		if ( $value === '' ) {
 			return $default;
 		}
 	}
 
-	if ( ! filter_var( $value, $filter ) ) {
+	if ( ! $value = filter_var( $value, $filter ) ) {
 		add_settings_error( 'wp_gatsby_theme_messages', 'wp_gatsby_theme_settings_error', __( $error, 'wp-gatsby-theme' ), 'error' );
 		$value = $default;
+	}
+
+	return $value;
+}
+
+function wp_gatsby_theme_validate_page( $value, $error = 'An error occured', $default = '' ) {
+	if ( $value === '' ) {
+		return $value;
+	}
+
+	if ( ! wp_gatsby_theme_is_valid_page( $value ) ) {
+		add_settings_error( 'wp_gatsby_theme_messages', 'wp_gatsby_theme_settings_error', __( $error, 'wp-gatsby-theme' ), 'error' );
+		$value = $default;
+	} else {
+		$value = intval( $value );
+	}
+
+	return $value;
+}
+
+function wp_gatsby_theme_is_valid_page( $value ) {
+	if ( ! is_numeric( $value ) ) {
+		return false;
+	}
+
+	$value = intval( $value );
+
+	$valid_pages = get_pages();
+
+	foreach ( $valid_pages as $page ) {
+		if ( $page->ID === $value ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+function wp_gatsby_theme_validate_boolean( $value ) {
+	if ( ! is_numeric( $value ) ) {
+		return false;
+	}
+
+	$value = intval( $value );
+
+	if ( $value !== 1 && $value !== 0 ) {
+		add_settings_error( 'wp_gatsby_theme_messages', 'wp_gatsby_theme_settings_error', __( 'Invalid value', 'wp-gatsby-theme' ), 'error' );
+		return 0;
+	}
+
+	return $value;
+}
+
+function wp_gatsby_theme_validate_jwt_expire( $value, $default = null ) {
+	if ( ! is_string( $value ) ) {
+		return $default;
+	}
+
+	$value = strtoupper( trim( $value ) );
+
+	if ( ! preg_match( '/^(\d+Y)?(\d+MO)?(\d+W)?(\d+D)?(\d+H)?(\d+M)?(\d+)?$/', $value ) ) {
+		add_settings_error( 'wp_gatsby_theme_messages', 'wp_gatsby_theme_settings_error_jwt_expire', __( 'JWT Expire Time value is invalid', 'wp-gatsby-theme' ), 'error' );
+		return $default;
 	}
 
 	return $value;

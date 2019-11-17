@@ -131,12 +131,12 @@ function wp_gatsby_theme_get_terms( $taxonomy, $data, $field, $request ) {
 		foreach ( $terms as $term ) {
 			array_push(
 				$formatted_terms,
-				(object) [
+				(object) array(
 					'text_color' => get_field( 'text_color', $term ),
 					'color'      => get_field( 'color', $term ),
 					'title'      => $term->name,
 					'slug'       => $term->slug,
-				]
+				)
 			);
 		}
 	}
@@ -155,18 +155,19 @@ function get_post_featured_media( $data, $field, $request ) {
 }
 
 function get_author_meta( $data, $field, $request ) {
-	$author_meta  = array();
-	$user_data    = get_userdata( $data['author'] );
-	$display_name = $user_data->data->display_name;
-	$avatar_url   = get_avatar_url( $user_data->data->ID );
-	$twitter_url  = get_the_author_meta( 'twitter', $user_data->data->ID );
-	$linkedin_url = get_the_author_meta( 'linkedin', $user_data->data->ID );
+	$author_meta = array();
+	$user_data   = get_userdata( $data['author'] );
+	if ( $user_data ) {
+		$display_name = $user_data->data->display_name;
+		$avatar_url   = get_avatar_url( $user_data->data->ID );
+		$twitter_url  = get_the_author_meta( 'twitter', $user_data->data->ID );
+		$linkedin_url = get_the_author_meta( 'linkedin', $user_data->data->ID );
 
-	$author_meta['display_name'] = $display_name;
-	$author_meta['avatar_url']   = $avatar_url;
-	$author_meta['twitter_url']  = $twitter_url;
-	$author_meta['linkedin_url'] = $linkedin_url;
-
+		$author_meta['display_name'] = $display_name;
+		$author_meta['avatar_url']   = $avatar_url;
+		$author_meta['twitter_url']  = $twitter_url;
+		$author_meta['linkedin_url'] = $linkedin_url;
+	}
 	return $author_meta;
 }
 
