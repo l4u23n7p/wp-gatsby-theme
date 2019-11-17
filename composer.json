@@ -1,6 +1,6 @@
 {
   "name": "lpwp/wp-gatsby-theme",
-  "description": "Jamstack portfolio theme",
+  "description": "Jamstack portfolio theme made for Gatsby",
   "version": "0.1.0",
   "type": "wordpress-theme",
   "homepage": "https://github.com/Laurent-PANEK/portfolio-wp-theme",
