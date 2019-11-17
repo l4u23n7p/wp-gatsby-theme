@@ -2,3 +2,4 @@ ansible
 .circleci
 .git
 .gitignore
+vendor/

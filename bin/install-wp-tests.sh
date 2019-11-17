@@ -18,18 +18,14 @@ WP_TESTS_DIR=${WP_TESTS_DIR-$TMPDIR/wordpress-tests-lib}
 WP_CORE_DIR=${WP_CORE_DIR-$TMPDIR/wordpress/}
 
 download() {
-    if [ `which curl` ]; then
-        curl -s "$1" > "$2";
-    elif [ `which wget` ]; then
-        wget -nv -O "$2" "$1"
-    fi
+	if [ $(which curl) ]; then
+		curl -s "$1" >"$2"
+	elif [ $(which wget) ]; then
+		wget -nv -O "$2" "$1"
+	fi
 }
 
-if [[ $WP_VERSION =~ ^[0-9]+\.[0-9]+\-(beta|RC)[0-9]+$ ]]; then
-	WP_BRANCH=${WP_VERSION%\-*}
-	WP_TESTS_TAG="branches/$WP_BRANCH"
-
-elif [[ $WP_VERSION =~ ^[0-9]+\.[0-9]+$ ]]; then
+if [[ $WP_VERSION =~ ^[0-9]+\.[0-9]+$ ]]; then
 	WP_TESTS_TAG="branches/$WP_VERSION"
 elif [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
 	if [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0] ]]; then
@@ -51,19 +47,20 @@ else
 	fi
 	WP_TESTS_TAG="tags/$LATEST_VERSION"
 fi
+
 set -ex
 
 install_wp() {
 
 	if [ -d $WP_CORE_DIR ]; then
-		return;
+		return
 	fi
 
 	mkdir -p $WP_CORE_DIR
 
 	if [[ $WP_VERSION == 'nightly' || $WP_VERSION == 'trunk' ]]; then
 		mkdir -p $TMPDIR/wordpress-nightly
-		download https://wordpress.org/nightly-builds/wordpress-latest.zip  $TMPDIR/wordpress-nightly/wordpress-nightly.zip
+		download https://wordpress.org/nightly-builds/wordpress-latest.zip $TMPDIR/wordpress-nightly/wordpress-nightly.zip
 		unzip -q $TMPDIR/wordpress-nightly/wordpress-nightly.zip -d $TMPDIR/wordpress-nightly/
 		mv $TMPDIR/wordpress-nightly/wordpress/* $WP_CORE_DIR
 	else
@@ -77,7 +74,7 @@ install_wp() {
 				LATEST_VERSION=${WP_VERSION%??}
 			else
 				# otherwise, scan the releases and get the most up to date minor version of the major release
-				local VERSION_ESCAPED=`echo $WP_VERSION | sed 's/\./\\\\./g'`
+				local VERSION_ESCAPED=$(echo $WP_VERSION | sed 's/\./\\\\./g')
 				LATEST_VERSION=$(grep -o '"version":"'$VERSION_ESCAPED'[^"]*' $TMPDIR/wp-latest.json | sed 's/"version":"//' | head -1)
 			fi
 			if [[ -z "$LATEST_VERSION" ]]; then
@@ -88,7 +85,7 @@ install_wp() {
 		else
 			local ARCHIVE_NAME="wordpress-$WP_VERSION"
 		fi
-		download https://wordpress.org/${ARCHIVE_NAME}.tar.gz  $TMPDIR/wordpress.tar.gz
+		download https://wordpress.org/${ARCHIVE_NAME}.tar.gz $TMPDIR/wordpress.tar.gz
 		tar --strip-components=1 -zxmf $TMPDIR/wordpress.tar.gz -C $WP_CORE_DIR
 	fi
 
@@ -132,16 +129,16 @@ install_db() {
 
 	# parse DB_HOST for port or socket references
 	local PARTS=(${DB_HOST//\:/ })
-	local DB_HOSTNAME=${PARTS[0]};
-	local DB_SOCK_OR_PORT=${PARTS[1]};
+	local DB_HOSTNAME=${PARTS[0]}
+	local DB_SOCK_OR_PORT=${PARTS[1]}
 	local EXTRA=""
 
-	if ! [ -z $DB_HOSTNAME ] ; then
+	if ! [ -z $DB_HOSTNAME ]; then
 		if [ $(echo $DB_SOCK_OR_PORT | grep -e '^[0-9]\{1,\}$') ]; then
 			EXTRA=" --host=$DB_HOSTNAME --port=$DB_SOCK_OR_PORT --protocol=tcp"
-		elif ! [ -z $DB_SOCK_OR_PORT ] ; then
+		elif ! [ -z $DB_SOCK_OR_PORT ]; then
 			EXTRA=" --socket=$DB_SOCK_OR_PORT"
-		elif ! [ -z $DB_HOSTNAME ] ; then
+		elif ! [ -z $DB_HOSTNAME ]; then
 			EXTRA=" --host=$DB_HOSTNAME --protocol=tcp"
 		fi
 	fi
