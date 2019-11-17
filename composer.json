@@ -1,0 +1,42 @@
+{
+  "name": "lpwp/wp-gatsby-theme",
+  "description": "Jamstack portfolio theme",
+  "version": "0.1.0",
+  "type": "wordpress-theme",
+  "homepage": "https://github.com/Laurent-PANEK/portfolio-wp-theme",
+  "readme": "README.md",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Laurent Panek",
+      "homepage": "https://laurentpanek.me",
+      "role": "Developer"
+    },
+    {
+      "name": "Abdessalam Benharira",
+      "homepage": "https://abdessalam.dev/",
+      "role": "Developer"
+    }
+  ],
+  "require-dev": {
+    "roave/security-advisories": "dev-master",
+    "squizlabs/php_codesniffer": "*",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+    "phpcompatibility/php-compatibility": "*",
+    "phpcompatibility/phpcompatibility-paragonie": "*",
+    "phpcompatibility/phpcompatibility-wp": "*",
+    "wp-coding-standards/wpcs": "*",
+    "phpunit/phpunit": "7.*",
+    "phpunit/php-invoker": "^2.0"
+  },
+  "prefer-stable": true,
+  "scripts": {
+    "post-install-cmd": [
+      "git clone --branch 5.8.4 https://github.com/wp-premium/advanced-custom-fields-pro vendor/advanced-custom-fields-pro"
+    ],
+    "test": "phpunit",
+    "check": "phpcs . --colors --report=summary",
+    "verify": "phpcs . --colors",
+    "format": "phpcbf ."
+  }
+}
