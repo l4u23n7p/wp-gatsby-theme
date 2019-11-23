@@ -111,7 +111,7 @@ function get_theme_settings() {
 	 $settings = array();
 
 	$settings['social'] = wp_gatsby_theme_get_settings( 'wp_gatsby_theme_social_settings' );
-	$settings['page']   = get_page_settings();
+	$settings['page']   = wp_gatsby_theme_expand_rest_url( get_page_settings() );
 
 	return $settings;
 }
