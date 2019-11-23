@@ -229,7 +229,7 @@ function social_options_validate( $options ) {
 function deploy_options_validate( $options ) {
 	$options['auto'] = wp_gatsby_theme_validate_boolean( $options['auto'] );
 
-	$options['hook']         = wp_gatsby_theme_validate_url( trim( $options['hook'] ), 'Deploy Hook url is invalid' );
+	$options['hook']         = wp_gatsby_theme_validate_url( trim( $options['hook'] ), 'Deploy Hook url is invalid', null, true );
 	$options['status_image'] = wp_gatsby_theme_validate_url( trim( $options['status_image'] ), 'Status Image url is invalid', null, true );
 	$options['status_link']  = wp_gatsby_theme_validate_url( trim( $options['status_link'] ), 'Status Link url is invalid', null, true );
 
