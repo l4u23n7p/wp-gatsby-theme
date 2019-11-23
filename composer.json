@@ -32,7 +32,7 @@
   "prefer-stable": true,
   "scripts": {
     "post-install-cmd": [
-      "git clone --branch 5.8.4 https://github.com/wp-premium/advanced-custom-fields-pro vendor/advanced-custom-fields-pro"
+      "git clone --quiet --branch 5.8.4 https://github.com/wp-premium/advanced-custom-fields-pro vendor/advanced-custom-fields-pro"
     ],
     "test": "phpunit",
     "check": "phpcs . --colors --report=summary",
