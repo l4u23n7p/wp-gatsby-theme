@@ -1,0 +1,67 @@
+{
+  "key": "group_taxonomy_5cb98c42871bc",
+  "title": "Taxonomy Metadata",
+  "fields": [
+    {
+      "key": "field_taxonomy_5cb98c4a2000c",
+      "label": "Color",
+      "name": "color",
+      "type": "color_picker",
+      "instructions": "",
+      "required": 1,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": ""
+    },
+    {
+      "key": "field_taxonomy_5cb9b78d6487e",
+      "label": "Text Color",
+      "name": "text_color",
+      "type": "color_picker",
+      "instructions": "",
+      "required": 1,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": ""
+    }
+  ],
+  "location": [
+    [
+      {
+        "param": "taxonomy",
+        "operator": "==",
+        "value": "category"
+      }
+    ],
+    [
+      {
+        "param": "taxonomy",
+        "operator": "==",
+        "value": "post_tag"
+      }
+    ],
+    [
+      {
+        "param": "taxonomy",
+        "operator": "==",
+        "value": "filter"
+      }
+    ]
+  ],
+  "menu_order": 0,
+  "position": "normal",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "hide_on_screen": "",
+  "active": true,
+  "description": ""
+}

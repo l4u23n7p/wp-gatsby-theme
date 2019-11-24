@@ -179,6 +179,26 @@ function wp_gatsby_theme_get_settings( $settings, $key = null ) {
 	return null;
 }
 
+function wp_gatsby_theme_expand_rest_url( $value ) {
+	if ( ! is_array( $value ) ) {
+		return $value;
+	}
+
+	foreach ( $value as $key => $id ) {
+		$type = get_post_type( $id );
+
+		if ( $type ) {
+			$ressource     = get_post_type_object( $type )->rest_base;
+			$value[ $key ] = array(
+				'id'   => $id,
+				'link' => rest_url( "/wp/v2/$ressource/$id" ),
+			);
+		}
+	}
+
+	return $value;
+}
+
 /**
  * Settings Helpers
  */

@@ -13,21 +13,21 @@ job-references:
   setup_environment: &setup_environment
     name: "Setup Environment Variables"
     command: |
-      echo "export PATH=$HOME/.composer/vendor/bin:$PATH" >> $BASH_ENV
+      echo "export PATH=$HOME/.composer/vendor/bin:$CIRCLE_WORKING_DIRECTORY/vendor/bin:$PATH" >> $BASH_ENV
       source /home/circleci/.bashrc
 
   install_dependencies: &install_dependencies
     name: "Install Dependencies"
     command: |
-      sudo apt-get update && sudo apt-get install subversion
+      sudo sh -c "printf '\ndeb http://ftp.us.debian.org/debian sid main\n' >> /etc/apt/sources.list" && \
+      sudo apt-get update && \
+      sudo apt-get install subversion mysql-client-5.7 && \
       sudo -E docker-php-ext-install mysqli
-      sudo sh -c "printf '\ndeb http://ftp.us.debian.org/debian sid main\n' >> /etc/apt/sources.list"
-      sudo apt-get update && sudo apt-get install mysql-client-5.7
 
   test_job: &test_job
     environment:
       - WP_TESTS_DIR: "/tmp/wordpress-tests-lib"
-      - WP_CORE_DIR: "/tmp/wordpress/"
+      - WP_CORE_DIR: "/tmp/wordpress"
     steps:
       - checkout
       - run: *setup_environment
@@ -35,13 +35,14 @@ job-references:
       - run:
           name: "Install Tests environment"
           command: |
-            # composer install
-            composer global require "phpunit/phpunit=7.*"
+            composer install --dev --quiet
+
+            echo $WP_TESTS_DIR 
+            echo $WP_CORE_DIR
+            svn --version
 
             rm -rf $WP_TESTS_DIR $WP_CORE_DIR
             bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 << parameters.version >>
-
-            git clone --branch 5.8.4 https://github.com/wp-premium/advanced-custom-fields-pro vendor/advanced-custom-fields-pro
       - run:
           name: "Run Tests"
           command: |
@@ -78,7 +79,7 @@ job-references:
 jobs:
   php71-wp50-test:
     docker:
-      - image: circleci/php:7.1
+      - image: circleci/php:7.1-fpm
       - image: *mysql_image
     parameters:
       version:
@@ -87,7 +88,7 @@ jobs:
     <<: *test_job
   php73-wp51-test:
     docker:
-      - image: circleci/php:7.3
+      - image: circleci/php:7.3-fpm
       - image: *mysql_image
     parameters:
       version:
@@ -96,7 +97,7 @@ jobs:
     <<: *test_job
   php73-wp52-test:
     docker:
-      - image: circleci/php:7.3
+      - image: circleci/php:7.3-fpm
       - image: *mysql_image
     parameters:
       version:
@@ -105,7 +106,7 @@ jobs:
     <<: *test_job
   php73-wp53-test:
     docker:
-      - image: circleci/php:7.3
+      - image: circleci/php:7.3-fpm
       - image: *mysql_image
     parameters:
       version:
